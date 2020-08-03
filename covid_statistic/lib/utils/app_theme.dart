@@ -42,6 +42,7 @@ class AppTheme {
   /// Dark theme
   static const Color nearlyDark = Color(0xFF252a36);
   static const Color backgroundDark = Color(0xFF21242e);
+  static const Color darkerText = Color(0xFF17262A);
   static const Color whiteText = Color(0xFFfefefe);
   static const Color subText = Color(0xFFBBBBBB);
 

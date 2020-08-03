@@ -1,6 +1,6 @@
 class CovidStats {
   String country, area, newsCases, newDeaths;
-  int totalCases, totalDeaths, totalRecovered, activeCases, seriousCritical;
+  String totalCases, totalDeaths, totalRecovered, activeCases, seriousCritical;
 
   CovidStats.fromJson(Map<String, dynamic> json)
       : country = json["country"],
