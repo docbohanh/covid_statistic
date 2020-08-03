@@ -36,9 +36,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       );
 
     case Routes.mainPage:
-      return hudableMaterialPageRoute(
-        settingName: Routes.mainPage,
-        page: MainPage(),
+      return FadeTransitionPageRoute(
+        settings: RouteSettings(name: Routes.mainPage),
+        builder: (context) => ProgressHud(
+          child: MainPage(),
+        ),
       );
 
     default:

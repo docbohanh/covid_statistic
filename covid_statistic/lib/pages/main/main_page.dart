@@ -9,7 +9,6 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPage extends State<MainPage> with TickerProviderStateMixin {
-  final bottomNavigationBarIndex = 0;
   AnimationController animationController;
   bool isLoading = true;
 
