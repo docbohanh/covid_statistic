@@ -1,7 +1,7 @@
 import 'package:covid_statistic/helper/app_bar.dart';
 import 'package:covid_statistic/helper/color_loader.dart';
-import 'package:covid_statistic/helper/hud.dart';
 import 'package:covid_statistic/helper/local_dropdown.dart';
+import 'package:covid_statistic/helper/photo_viewer.dart';
 import 'package:covid_statistic/helper/title_view.dart';
 import 'package:covid_statistic/model/covid_info.dart';
 import 'package:covid_statistic/model/main_info.dart';
@@ -94,7 +94,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
             onRefresh: () => refreshPandemicInfo(),
             viewModel: viewModel,
             onChartView: () {
-              HUD.showMessage(context, text: 'Show chart');
+              Utilities.launchURL(context, url: Constant.infoGraphicLink);
             },
           );
         },

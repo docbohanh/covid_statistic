@@ -13,6 +13,8 @@ class Constant {
   static final locales = kLocales;
 
   static final themes = kThemes;
+
+  static final String infoGraphicLink = r'https://ncov.moh.gov.vn/documents/20182/6848000/infographicVN1120.jpg';
 }
 
 const kVIVN = "vi_vn";
