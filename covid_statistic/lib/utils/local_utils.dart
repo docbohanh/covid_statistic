@@ -7,18 +7,18 @@ class LocalizationUtils {
     locale = locale != null ? locale.toLowerCase() : '';
 
     if (locale == null || locale.isEmpty) {
-      return AppConstant.locales[AppConstant.defaultLocaleKey];
+      return Constant.locales[Constant.defaultLocaleKey];
     }
 
-    String lang = AppConstant.locales.keys.firstWhere(
+    String lang = Constant.locales.keys.firstWhere(
             (key) => key.substring(0, 2) == locale.substring(0, 2),
-        orElse: () => AppConstant.defaultLocaleKey);
+        orElse: () => Constant.defaultLocaleKey);
 
-    return AppConstant.locales[lang];
+    return Constant.locales[lang];
   }
 
   static List<String> getLocaleNamesPretty() {
-    return AppConstant.locales.keys
+    return Constant.locales.keys
         .map((name) => name.toUpperCase())
         .toList();
   }

@@ -13,8 +13,7 @@ class AppState extends AppStateModel {
 
   AppState._internal() {
     logger.info('-------APP STATE INIT--------');
-    _createThemes(themes);
-    _createIcons();
+    _createThemes();
   }
 
   static final AppState _singletonAppState = AppState._internal();
@@ -25,14 +24,7 @@ class AppState extends AppStateModel {
   final currentIcons = StreamedValue<String>();
   final icons = List<String>();
 
-  void _createIcons() {
-    icons.addAll([
-      'VTNB',
-      'Quiz',
-    ]);
-  }
-
-  void _createThemes(List<MyTheme> themes) {
+  void _createThemes() {
     themes.addAll([
       AppTheme.defaultLight,
       AppTheme.defaultDark,
@@ -42,7 +34,7 @@ class AppState extends AppStateModel {
   void setTheme(MyTheme theme) async {
     currentTheme.value = theme;
     var prefs = await SharedPreferences.getInstance();
-    prefs.setString(AppConstant.appTheme, theme.name);
+    prefs.setString(Constant.appTheme, theme.name);
   }
 
   void setIcons(String iconName) async {
@@ -68,21 +60,12 @@ class AppState extends AppStateModel {
     }
   }
 
-  bool isPad;
-
-  void setPhonePad(double shortestSide) {
-    if (isPad == null) {
-      logger.info('shortestSide = $shortestSide');
-      isPad = shortestSide > 600;
-    }
-  }
-
   ///
   @override
   Future<void> init() async {
     var prefs = await SharedPreferences.getInstance();
 
-    final String lastTheme = prefs.getString(AppConstant.appTheme);
+    final String lastTheme = prefs.getString(Constant.appTheme);
     if (lastTheme != null) {
       currentTheme.value = themes.firstWhere(
             (theme) => theme.name == lastTheme,
@@ -90,16 +73,6 @@ class AppState extends AppStateModel {
       );
     } else {
       currentTheme.value = themes[0];
-    }
-
-    final String lastIcon = prefs.getString('app_icon');
-    if (lastIcon != null) {
-      currentIcons.value = icons.firstWhere(
-            (oldIcon) => oldIcon == lastIcon,
-        orElse: () => icons[0],
-      );
-    } else {
-      currentIcons.value = icons[0];
     }
   }
 

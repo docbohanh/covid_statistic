@@ -1,3 +1,4 @@
+import 'package:covid_statistic/helper/spinning_widget.dart';
 import 'package:covid_statistic/model/localization.dart';
 import 'package:covid_statistic/utils/app_theme.dart';
 import 'package:covid_statistic/utils/constant.dart';
@@ -42,11 +43,14 @@ class LocaleDropDown extends StatelessWidget {
   List<Widget> _selectedItemBuilder(context) {
     return LocalizationUtils.getLocaleNamesPretty()
         .map(
-          (value) => SizedBox(
-            height: 28,
-            width: 28,
-            child: SvgPicture.asset(
-              "assets/flags/${locale.countryCode.toLowerCase()}.svg",
+          (value) => SpinningWidget(
+            size: 28,
+            child: SizedBox(
+              height: 28,
+              width: 28,
+              child: SvgPicture.asset(
+                "assets/flags/${locale.countryCode.toLowerCase()}.svg",
+              ),
             ),
           ),
         )
@@ -54,7 +58,7 @@ class LocaleDropDown extends StatelessWidget {
   }
 
   List<DropdownMenuItem<String>> _dropdownMenuItem() {
-    return AppConstant.locales.keys.map<DropdownMenuItem<String>>((String key) {
+    return Constant.locales.keys.map<DropdownMenuItem<String>>((String key) {
       ILocalization localeTemp = LocalizationUtils.getLocale(key);
       return DropdownMenuItem<String>(
         value: key.toUpperCase(),

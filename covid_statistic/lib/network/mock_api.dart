@@ -1,5 +1,6 @@
 
 import 'package:covid_statistic/model/covid_info.dart';
+import 'package:covid_statistic/network/response/stats_res.dart';
 
 import 'api.dart';
 
@@ -12,8 +13,8 @@ class MockAPI implements API {
   ApiType apiType = ApiType.mock;
 
   @override
-  Future<List<CovidInfo>> getWorldometersInfo() {
-    return Future.value([]);
+  Future<CovidStatsResponse> getWorldometersInfo() {
+    return Future.value(null);
   }
 
   @override

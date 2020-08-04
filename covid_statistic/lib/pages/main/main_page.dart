@@ -113,7 +113,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
           backgroundColor: Colors.transparent,
           appBar: gradientAppbar(height: 54, actions: [
             LocaleDropDown(
-              locale: LocalizationUtils.getLocale(AppConstant.defaultLocaleKey),
+              locale: LocalizationUtils.getLocale(Constant.defaultLocaleKey),
               onChanged: (String newValue) {
 
               },

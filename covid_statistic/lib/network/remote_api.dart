@@ -17,7 +17,7 @@ class RemoteAPI implements API {
   ApiType apiType = ApiType.remote;
 
   @override
-  Future<List<CovidInfo>> getWorldometersInfo({
+  Future<CovidStatsResponse> getWorldometersInfo({
     String endpoint = 'https://thanhladev.herokuapp.com/api/coronavirus',
   }) async {
     try {
@@ -25,7 +25,7 @@ class RemoteAPI implements API {
           .get(endpoint)
           .then((r) => CovidStatsResponse.fromJson(json.decode(r.body)));
       logger.info(res.data);
-      return res.data;
+      return res;
     } catch (e) {
       logger.info("ERROR ${e.toString()}");
       throw e;

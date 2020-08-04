@@ -37,18 +37,21 @@ class _PandemicView extends State<PandemicView>  with TickerProviderStateMixin {
 
   @override
   void initState() {
-    animationController = AnimationController(
-        duration: Duration(milliseconds: 700), vsync: this);
+    _initAnimation();
 
     super.initState();
 
     widget.viewModel.refreshStream.listen((isRefresh) {
       if (!isRefresh) {
+        _initAnimation();
         animationController.forward();
-      } else {
-        animationController.reverse();
       }
     });
+  }
+
+  void _initAnimation() {
+    animationController = AnimationController(
+        duration: Duration(milliseconds: 700), vsync: this);
   }
 
   @override

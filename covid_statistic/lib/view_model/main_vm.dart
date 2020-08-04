@@ -1,12 +1,12 @@
 import 'package:covid_statistic/model/covid_info.dart';
 import 'package:covid_statistic/model/main_info.dart';
-import 'package:covid_statistic/utils/utility.dart';
+import 'package:covid_statistic/network/response/response.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'base_vm.dart';
 
 class MainViewModel extends BaseViewModel {
-  final BehaviorSubject<List<CovidInfo>> _statsResponse = BehaviorSubject();
+  final BehaviorSubject<CovidStatsResponse> _statsResponse = BehaviorSubject();
   final BehaviorSubject<CovidInfo> _pandemicResponse = BehaviorSubject();
   final BehaviorSubject<bool> _refresh = BehaviorSubject();
   final BehaviorSubject<MainInfo> _mainInfo = BehaviorSubject();
@@ -15,12 +15,12 @@ class MainViewModel extends BaseViewModel {
     mainInfoChanged(MainInfo.world);
   }
 
-  Function(List<CovidInfo>) get statsResponse => _statsResponse.sink.add;
+  Function(CovidStatsResponse) get statsResponse => _statsResponse.sink.add;
   Function(CovidInfo) get pandemicResponse => _pandemicResponse.sink.add;
   Function(bool) get onRefresh => _refresh.sink.add;
   Function(MainInfo) get mainInfoChanged => _mainInfo.sink.add;
 
-  Stream<List<CovidInfo>> get pandemicStats => _statsResponse.stream;
+  Stream<CovidStatsResponse> get pandemicStats => _statsResponse.stream;
   Stream<CovidInfo> get pandemicInfo => _pandemicResponse.stream;
   Stream<bool> get refreshStream => _refresh.stream;
   Stream<MainInfo> get mainInfoStream => _mainInfo.stream;
@@ -30,11 +30,9 @@ class MainViewModel extends BaseViewModel {
   fetchedStatistic() async {
     repo.getWorldometersInfo().then((value) {
       statsResponse(value);
-      logger.info("getting ${value.length} item");
-
     }).catchError((error) {
       errorEvent(error);
-      statsResponse([]);
+      statsResponse(null);
     });
   }
 
@@ -45,6 +43,7 @@ class MainViewModel extends BaseViewModel {
       onRefresh(false);
     }).catchError((error) {
       errorEvent(error);
+      pandemicResponse(null);
     });
   }
 
@@ -55,6 +54,7 @@ class MainViewModel extends BaseViewModel {
       onRefresh(false);
     }).catchError((error) {
       errorEvent(error);
+      pandemicResponse(null);
     });
   }
 

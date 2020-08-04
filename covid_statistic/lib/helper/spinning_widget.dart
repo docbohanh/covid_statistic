@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
-class SpinningImage extends StatefulWidget {
-  final double imageSize;
+class SpinningWidget extends StatefulWidget {
+  final double size;
   final Widget child;
 
-  const SpinningImage({
+  const SpinningWidget({
     Key key,
-    @required this.imageSize,
+    @required this.size,
     this.child,
   }) : super(key: key);
 
   @override
-  _SpinningImageState createState() => _SpinningImageState();
+  _SpinningWidgetState createState() => _SpinningWidgetState();
 }
 
-class _SpinningImageState extends State<SpinningImage>
+class _SpinningWidgetState extends State<SpinningWidget>
     with SingleTickerProviderStateMixin {
   Animation<double> animation;
   AnimationController controller;
@@ -50,23 +50,23 @@ class _SpinningImageState extends State<SpinningImage>
     return Transform.rotate(
       angle: animation.value,
       child: Container(
-        width: widget.imageSize,
-        height: widget.imageSize,
+        width: widget.size,
+        height: widget.size,
         child: widget.child,
         decoration: BoxDecoration(
           color: Colors.grey[100],
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color: Colors.grey[400],
+              color: Colors.grey[100],
               offset: Offset(1.0, 1.0),
-              blurRadius: 10.0,
+              blurRadius: 5.0,
               spreadRadius: 1.0,
             ),
             BoxShadow(
               color: Colors.white70,
               offset: Offset(-1.0, -1.0),
-              blurRadius: 10.0,
+              blurRadius: 5.0,
               spreadRadius: 1.0,
             ),
           ],
