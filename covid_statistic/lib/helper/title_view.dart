@@ -1,4 +1,5 @@
 import 'package:covid_statistic/utils/app_theme.dart';
+import 'package:covid_statistic/utils/custom_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -33,11 +34,11 @@ class TitleView extends StatelessWidget {
                   children: <Widget>[
                     Expanded(
                       child: Text(
-                        titleTxt,
+                        '$titleTxt',
                         textAlign: TextAlign.left,
                         style: GoogleFonts.roboto(
                           fontWeight: FontWeight.w500,
-                          fontSize: 18,
+                          fontSize: 17,
                           letterSpacing: 0.5,
                           color: AppTheme.lightText,
                         ),
@@ -56,7 +57,7 @@ class TitleView extends StatelessWidget {
                               textAlign: TextAlign.left,
                               style: GoogleFonts.roboto(
                                 fontWeight: FontWeight.normal,
-                                fontSize: 16,
+                                fontSize: 15,
                                 letterSpacing: 0.5,
                                 color: AppTheme.nearlyDarkBlue,
                               ),

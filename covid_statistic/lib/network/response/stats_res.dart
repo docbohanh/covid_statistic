@@ -1,12 +1,12 @@
-import 'package:covid_statistic/model/covid_stats.dart';
+import 'package:covid_statistic/model/covid_info.dart';
 import 'package:covid_statistic/network/response/response.dart';
 
-class CovidStatsResponse implements BaseResponse<List<CovidStats>> {
+class CovidStatsResponse implements BaseResponse<List<CovidInfo>> {
   @override
   int code;
 
   @override
-  List<CovidStats> data;
+  List<CovidInfo> data;
 
   @override
   String message;
@@ -15,7 +15,7 @@ class CovidStatsResponse implements BaseResponse<List<CovidStats>> {
     code = json['code'];
     message = json['message'];
     data = List<Map<String, dynamic>>.from(json['data'])
-        .map((e) => CovidStats.fromJson(e))
+        .map((e) => CovidInfo.fromJson(e))
         .toList();
   }
 }

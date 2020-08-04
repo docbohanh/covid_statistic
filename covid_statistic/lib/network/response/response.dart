@@ -1,4 +1,5 @@
-export 'stats_response.dart';
+export 'stats_res.dart';
+export 'covid_res.dart';
 
 class BaseResponse<T> {
   int code;
