@@ -1,10 +1,9 @@
-import 'package:covid_statistic/pages/main/main_drop.dart';
 import 'package:covid_statistic/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class TitleView extends StatelessWidget {
-  final MainDropdown title;
+  final Widget title;
   final String subTxt;
   final AnimationController animationController;
   final Animation animation;
@@ -40,9 +39,7 @@ class TitleView extends StatelessWidget {
                     InkWell(
                       highlightColor: Colors.transparent,
                       borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                      onTap: () {
-                        onViewDetail();
-                      },
+                      onTap: onViewDetail,
                       child: Padding(
                         padding: const EdgeInsets.only(left: 8),
                         child: Row(

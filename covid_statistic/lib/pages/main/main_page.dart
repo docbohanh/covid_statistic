@@ -14,6 +14,7 @@ import 'package:covid_statistic/utils/utility.dart';
 import 'package:covid_statistic/view_model/main_vm.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key key}) : super(key: key);
@@ -97,6 +98,27 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
             },
           );
         },
+      ),
+    );
+
+    listViews.add(
+      TitleView(
+        title: Text(
+          'Top Infected Countries',
+          textAlign: TextAlign.left,
+          style: GoogleFonts.roboto(
+            fontWeight: FontWeight.w500,
+            fontSize: 17,
+            letterSpacing: 0.5,
+            color: AppTheme.lightText,
+          ),
+        ),
+        subTxt: 'more',
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: animationController,
+            curve:
+            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: animationController,
       ),
     );
   }
