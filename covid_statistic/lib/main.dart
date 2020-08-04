@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
       streamed: theme,
       initialData: AppTheme.defaultLight,
       builder: (context, snapshot) => MaterialApp(
-        title: 'Covid-19 Tracker',
+        title: 'Covid-19 Pandemic',
         theme: _buildThemeData(snapshot.data),
         onGenerateRoute: generateRoute,
         debugShowCheckedModeBanner: false,

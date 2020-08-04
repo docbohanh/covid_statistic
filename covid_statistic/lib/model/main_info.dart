@@ -13,5 +13,7 @@ class MainInfo {
     link: 'https://ncov.moh.gov.vn/',
   );
 
+  bool get isVN => name.contains('Vietnam');
+
   static List<MainInfo> items = [world, vietnam];
 }

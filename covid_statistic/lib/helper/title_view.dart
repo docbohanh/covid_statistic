@@ -1,21 +1,23 @@
+import 'package:covid_statistic/pages/main/main_drop.dart';
 import 'package:covid_statistic/utils/app_theme.dart';
-import 'package:covid_statistic/utils/custom_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class TitleView extends StatelessWidget {
-  final String titleTxt;
+  final MainDropdown title;
   final String subTxt;
   final AnimationController animationController;
   final Animation animation;
+  final Function onViewDetail;
 
-  const TitleView(
-      {Key key,
-        this.titleTxt: "",
-        this.subTxt: "",
-        this.animationController,
-        this.animation})
-      : super(key: key);
+  const TitleView({
+    Key key,
+    this.title,
+    this.subTxt: "",
+    this.animationController,
+    this.onViewDetail,
+    this.animation,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,23 +33,16 @@ class TitleView extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(left: 24, right: 24),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Expanded(
-                      child: Text(
-                        '$titleTxt',
-                        textAlign: TextAlign.left,
-                        style: GoogleFonts.roboto(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 17,
-                          letterSpacing: 0.5,
-                          color: AppTheme.lightText,
-                        ),
-                      ),
-                    ),
+                    title,
                     InkWell(
                       highlightColor: Colors.transparent,
                       borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                      onTap: () {},
+                      onTap: () {
+                        onViewDetail();
+                      },
                       child: Padding(
                         padding: const EdgeInsets.only(left: 8),
                         child: Row(

@@ -14,10 +14,12 @@ class CovidInfo {
         seriousCritical = int.tryParse(json['seriousCritical']);
 
   int get newCasesValue {
+    if (newCases.isEmpty) return 0;
     return int.tryParse(newCases.replaceAll('+', ''));
   }
 
   int get newDeathsValue {
+    if (newDeaths.isEmpty) return 0;
     return int.tryParse(newDeaths.replaceAll('+', ''));
   }
 

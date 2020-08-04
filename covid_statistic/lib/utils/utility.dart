@@ -1,14 +1,36 @@
+import 'package:covid_statistic/helper/hud.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:simple_logger/simple_logger.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 final SimpleLogger logger = SimpleLogger()
   ..mode = LoggerMode.print
   ..setLevel(Level.FINEST, includeCallerInfo: true);
 
 class Utilities {
+  static launchURL(BuildContext context,
+      {String url,
+      String errorMessage = 'Đường dẫn không tồn tại',
+      bool needShowDialog = true,
+      Map<String, String> headers}) async {
+    logger.info('Open url: $url');
+
+    if (await canLaunch(url)) {
+      await launch(
+        url,
+        enableJavaScript: true,
+        enableDomStorage: true,
+        headers: headers,
+        forceSafariVC: true,
+        forceWebView: true,
+      );
+    } else {
+      if (needShowDialog) HUD.showMessage(context, text: errorMessage);
+    }
+  }
 
   static hideKeyboardOf(BuildContext context) {
     FocusScope.of(context).requestFocus(FocusNode());
@@ -71,16 +93,15 @@ class Utilities {
   }
 
   static Future<bool> showConfirmDialog(
-      BuildContext context, {
-        String title = 'Xác nhận',
-        String message = '',
-        String okTitle = 'Đồng ý',
-        String cancelTitle = 'Bỏ qua',
-        bool showCancelButton = true,
-        Function onPressedOK,
-        Function onPressCancel,
-      }) {
-
+    BuildContext context, {
+    String title = 'Xác nhận',
+    String message = '',
+    String okTitle = 'Đồng ý',
+    String cancelTitle = 'Bỏ qua',
+    bool showCancelButton = true,
+    Function onPressedOK,
+    Function onPressCancel,
+  }) {
     var okAction = FlatButton(
       child: Text(
         okTitle,
