@@ -7,14 +7,14 @@ class TitleView extends StatelessWidget {
   final String subTxt;
   final AnimationController animationController;
   final Animation animation;
-  final Function onViewDetail;
+  final Function onViewMore;
 
   const TitleView({
     Key key,
     this.title,
     this.subTxt: "",
     this.animationController,
-    this.onViewDetail,
+    this.onViewMore,
     this.animation,
   }) : super(key: key);
 
@@ -39,7 +39,7 @@ class TitleView extends StatelessWidget {
                     InkWell(
                       highlightColor: Colors.transparent,
                       borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                      onTap: onViewDetail,
+                      onTap: onViewMore,
                       child: Padding(
                         padding: const EdgeInsets.only(left: 8),
                         child: Row(

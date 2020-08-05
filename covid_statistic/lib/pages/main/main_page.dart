@@ -4,9 +4,12 @@ import 'package:covid_statistic/helper/hud.dart';
 import 'package:covid_statistic/helper/local_dropdown.dart';
 import 'package:covid_statistic/helper/title_view.dart';
 import 'package:covid_statistic/model/covid_info.dart';
+import 'package:covid_statistic/model/country_info.dart';
 import 'package:covid_statistic/model/main_info.dart';
 import 'package:covid_statistic/pages/main/main_drop.dart';
-import 'package:covid_statistic/pages/main/pandemic_view.dart';
+import 'package:covid_statistic/pages/main/precautions/precaution_grid.dart';
+import 'package:covid_statistic/pages/main/stats/pandemic_view.dart';
+import 'package:covid_statistic/pages/main/top_country/country_stats.dart';
 import 'package:covid_statistic/utils/app_theme.dart';
 import 'package:covid_statistic/utils/constant.dart';
 import 'package:covid_statistic/utils/local_utils.dart';
@@ -38,11 +41,12 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
 
     addAllListData();
 
-    super.initState();
-
     viewModel.mainInfoStream.listen((_) => refreshPandemicInfo());
 
-//    Timer.periodic(Duration(seconds: 15), (Timer t) => refreshPandemicInfo());
+    super.initState();
+
+    viewModel.getCountryPandemic();
+
   }
 
   void refreshPandemicInfo() {
@@ -73,7 +77,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
                 curve:
                 Interval((1 / count) * 0, 1.0, curve: Curves.fastOutSlowIn))),
             animationController: animationController,
-            onViewDetail: () {
+            onViewMore: () {
               Utilities.launchURL(context, url: viewModel.mainInfoItem.link);
             },
           );
@@ -84,13 +88,13 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
     listViews.add(
       StreamBuilder(
         stream: viewModel.pandemicInfo,
-        builder: (context, AsyncSnapshot<CovidInfo> snapShot) {
+        builder: (context, AsyncSnapshot<CovidInfo> snapshot) {
           return PandemicView(
             animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
                 parent: animationController,
                 curve:
                 Interval((1 / count) * 1, 1.0, curve: Curves.fastOutSlowIn))),
-            info: (snapShot.data != null) ? snapShot.data : CovidInfo.mock48,
+            info: (snapshot.data != null) ? snapshot.data : CovidInfo.mock48,
             onRefresh: () => refreshPandemicInfo(),
             viewModel: viewModel,
             onChartView: () {
@@ -113,11 +117,69 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
             color: AppTheme.lightText,
           ),
         ),
-        subTxt: 'more',
+        subTxt: 'More',
+        onViewMore: () {
+          HUD.showMessage(context, text: 'View more');
+        },
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: animationController,
             curve:
             Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: animationController,
+      ),
+    );
+
+    listViews.add(
+      StreamBuilder(
+        stream: viewModel.countryPandemicStream,
+        builder: (context, AsyncSnapshot<List<CountryPandemic>> snapshot) {
+          if (!snapshot.hasData || snapshot.data == null) {
+            return SizedBox();
+          }
+          return CountryStatsView(
+            animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+                CurvedAnimation(
+                    parent: animationController,
+                    curve: Interval((1 / count) * 3, 1.0,
+                        curve: Curves.fastOutSlowIn))),
+            animationController: animationController,
+            topCountriesData: snapshot.data,
+          );
+        },
+      )
+    );
+
+    listViews.add(
+      TitleView(
+        title: Text(
+          'Precautions',
+          textAlign: TextAlign.left,
+          style: GoogleFonts.roboto(
+            fontWeight: FontWeight.w500,
+            fontSize: 17,
+            letterSpacing: 0.5,
+            color: AppTheme.lightText,
+          ),
+        ),
+        subTxt: 'More',
+        onViewMore: () {
+          HUD.showMessage(context, text: 'View more');
+        },
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: animationController,
+            curve:
+            Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: animationController,
+      ),
+    );
+
+    listViews.add(
+      AreaListView(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+            CurvedAnimation(
+                parent: animationController,
+                curve: Interval((1 / count) * 5, 1.0,
+                    curve: Curves.fastOutSlowIn))),
         animationController: animationController,
       ),
     );

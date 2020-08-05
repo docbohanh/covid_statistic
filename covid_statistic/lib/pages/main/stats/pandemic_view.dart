@@ -1,3 +1,4 @@
+import 'package:covid_statistic/helper/curve_painter.dart';
 import 'package:covid_statistic/model/covid_info.dart';
 import 'package:covid_statistic/utils/app_theme.dart';
 import 'package:covid_statistic/utils/custom_colors.dart';
@@ -30,7 +31,7 @@ class PandemicView extends StatefulWidget {
   }
 }
 
-class _PandemicView extends State<PandemicView>  with TickerProviderStateMixin {
+class _PandemicView extends State<PandemicView> with TickerProviderStateMixin {
   final numberFormat = NumberFormat("#,###", "en_US");
 
   AnimationController animationController;
@@ -50,12 +51,14 @@ class _PandemicView extends State<PandemicView>  with TickerProviderStateMixin {
   }
 
   void _initAnimation() {
-    animationController = AnimationController(
-        duration: Duration(milliseconds: 700), vsync: this);
+    animationController =
+        AnimationController(duration: Duration(milliseconds: 700), vsync: this);
   }
 
   @override
   Widget build(BuildContext context) {
+    var angle = widget.info.angle;
+
     return AnimatedBuilder(
       animation: animationController,
       builder: (BuildContext context, Widget child) {
@@ -249,12 +252,12 @@ class _PandemicView extends State<PandemicView>  with TickerProviderStateMixin {
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Container(
-                                    width: 120,
-                                    height: 120,
+                                    width: 130,
+                                    height: 130,
                                     decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.all(
-                                        Radius.circular(120.0),
+                                        Radius.circular(130.0),
                                       ),
                                       border: new Border.all(
                                           width: 4,
@@ -292,9 +295,28 @@ class _PandemicView extends State<PandemicView>  with TickerProviderStateMixin {
                                     ),
                                   ),
                                 ),
+                                Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: CustomPaint(
+                                    painter: CurvePainter(
+                                      colors: [
+                                        Color(0xFFa4f97e),
+                                        Color(0xff73e834),
+                                        Color(0xff32B402),
+                                      ],
+                                      angle: angle +
+                                          (360 - angle) *
+                                              (1.0 - animationController.value),
+                                    ),
+                                    child: SizedBox(
+                                      width: 138,
+                                      height: 138,
+                                    ),
+                                  ),
+                                ),
                                 Positioned(
-                                  bottom: 16,
-                                  left: 53,
+                                  bottom: 20,
+                                  left: 57,
                                   child: InkWell(
                                     onTap: () {
                                       widget.onRefresh();
@@ -310,7 +332,8 @@ class _PandemicView extends State<PandemicView>  with TickerProviderStateMixin {
                                           if (!snapshot.hasData ||
                                               !snapshot.data) {
                                             return Image.asset(
-                                                'assets/icon/secure.png');
+                                              'assets/icon/secure.png',
+                                            );
                                           }
                                           return CupertinoActivityIndicator();
                                         },
@@ -320,7 +343,7 @@ class _PandemicView extends State<PandemicView>  with TickerProviderStateMixin {
                                 ),
                                 Positioned(
                                   top: 10,
-                                  left: 46,
+                                  left: 50,
                                   child: IconButton(
                                     icon: Icon(
                                       Icons.multiline_chart,
@@ -330,7 +353,7 @@ class _PandemicView extends State<PandemicView>  with TickerProviderStateMixin {
                                       widget.onChartView();
                                     },
                                   ),
-                                )
+                                ),
                               ],
                             ),
                           ),

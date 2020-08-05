@@ -1,3 +1,7 @@
+import 'package:covid_statistic/utils/constant.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_svg/svg.dart';
+
 class CovidInfo {
   String country, area, newCases, newDeaths;
   int totalCases, totalDeaths, totalRecovered, activeCases, seriousCritical;
@@ -23,6 +27,24 @@ class CovidInfo {
     return int.tryParse(newDeaths.replaceAll('+', ''));
   }
 
+  double get angle {
+    return 360 * totalRecovered / totalCases;
+  }
+
+  Widget get flag {
+    var uCountry = COUNTRIES.where((element) {
+      return country.toLowerCase().contains(element['name'].toLowerCase());
+    }).first;
+
+    if (uCountry == null) {
+      return Container();
+    }
+
+    return SvgPicture.asset(
+      "assets/flags/${uCountry['iso2'].toLowerCase()}.svg",
+    );
+  }
+
   Map<String, dynamic> toJson() {
     return {
       "country": country,
@@ -33,33 +55,19 @@ class CovidInfo {
       "totalRecovered": totalRecovered,
       "activeCases": activeCases,
       "seriousCritical": seriousCritical,
-      "area": area
+      "area": area,
     };
   }
 
   static CovidInfo mock48 = CovidInfo.fromJson({
-    "country": "Total:",
-    "totalCases": "18444642",
-    "newCases": "+9210",
-    "totalDeaths": "697189",
-    "newDeaths": "+366",
-    "totalRecovered": "11675539",
-    "activeCases": "6071914",
-    "seriousCritical": "64677",
-    "area": "All"
+    "country": "USA",
+    "totalCases": "4862513",
+    "newCases": "+339",
+    "totalDeaths": "158968",
+    "newDeaths": "+39",
+    "totalRecovered": "2448295",
+    "activeCases": "2255250",
+    "seriousCritical": "18725",
+    "area": "North America"
   });
 }
-
-/**
-{
-    "country": "Total:",
-    "totalCases": "18444642",
-    "newCases": "+9210",
-    "totalDeaths": "697189",
-    "newDeaths": "+366",
-    "totalRecovered": "11675539",
-    "activeCases": "6071914",
-    "seriousCritical": "64677",
-    "area": "All"
-}
-*/

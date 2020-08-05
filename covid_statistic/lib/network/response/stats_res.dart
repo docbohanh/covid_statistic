@@ -33,18 +33,28 @@ class CovidStatsResponse implements BaseResponse<List<CovidInfo>> {
     'Total:'
   ];
 
+  CovidInfo vietnamInfo() {
+    var info = data.where((e) => e.country.contains('Vietnam'));
+    return info.first;
+  }
+
+  CovidInfo worldInfo() {
+    var info = data.where((e) => e.country.contains('World'));
+    return info.first;
+  }
+
   List<CovidInfo> getInfectedCountries() {
     return data.where((item) {
       if (item.country.isEmpty) return false;
       var ignores = continents + ignoresName;
       return !ignores.contains(item.country);
-    });
+    }).toList();
   }
 
-  List<CovidInfo> topInfectedCountries({int number = 5}) {
+  List<CovidInfo> topInfectedCountries({int number = 6}) {
     var infectedCountries = getInfectedCountries();
     infectedCountries.sort((lhs, rhs) {
-      return lhs.totalCases.compareTo(rhs.totalCases);
+      return rhs.totalCases.compareTo(lhs.totalCases);
     });
     return infectedCountries.take(number).toList();
   }

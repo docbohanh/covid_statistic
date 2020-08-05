@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:covid_statistic/model/covid_info.dart';
-import 'package:covid_statistic/model/info_model.dart';
+import 'package:covid_statistic/model/country_info.dart';
 import 'package:covid_statistic/network/response/response.dart';
 import 'package:covid_statistic/utils/utility.dart';
 import 'package:http/http.dart' as http;
@@ -24,7 +24,7 @@ class RemoteAPI implements API {
       var res = await http
           .get(endpoint)
           .then((r) => CovidStatsResponse.fromJson(json.decode(r.body)));
-      logger.info(res.data);
+      logger.info(res.data.length);
       return res;
     } catch (e) {
       logger.info("ERROR ${e.toString()}");
@@ -64,13 +64,13 @@ class RemoteAPI implements API {
     }
   }
 
-  Future<InfoModel> getWorldInfo() async {
+  Future<CountryPandemic> getWorldInfo() async {
     try {
       var response = await http
-          .get('https://disease.sh/v2/all')
+          .get('https://disease.sh/v3/covid-19/countries')
           .then((r) => Map<String, dynamic>.from(json.decode(r.body)));
 
-      InfoModel info = InfoModel.fromJson(response);
+      CountryPandemic info = CountryPandemic.fromJson(response);
 
       return info;
     } catch (e) {
@@ -79,14 +79,29 @@ class RemoteAPI implements API {
     }
   }
 
-  Future<InfoModel> getCountryInfo(String country) async {
+  Future<CountryPandemic> getCountryInfo(String country) async {
     try {
-      var response = await http.get("https://disease.sh/v2/countries/$country");
+      var response =
+          await http.get("https://disease.sh/v3/covid-19/countries/$country");
 
-      InfoModel info = InfoModel.fromJson(
+      CountryPandemic info = CountryPandemic.fromJson(
           Map<String, dynamic>.from(json.decode(response.body)));
 
       return info;
+    } catch (e) {
+      logger.info("ERROR ${e.toString()}");
+      throw e;
+    }
+  }
+
+  @override
+  Future<List<CountryPandemic>> getCountryPandemic() async {
+    try {
+      var response = await http
+          .get("https://disease.sh/v3/covid-19/countries/")
+          .then((r) => List<Map<String, dynamic>>.from(json.decode(r.body)));
+
+      return response.map((e) => CountryPandemic.fromJson(e)).toList();
     } catch (e) {
       logger.info("ERROR ${e.toString()}");
       throw e;
