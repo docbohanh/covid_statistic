@@ -398,7 +398,7 @@ class _PandemicView extends State<PandemicView> with TickerProviderStateMixin {
                                     textAlign: TextAlign.center,
                                     style: GoogleFonts.roboto(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 13,
+                                      fontSize: 15,
                                       color: Colors.redAccent,
                                     ),
                                   ),
@@ -433,7 +433,7 @@ class _PandemicView extends State<PandemicView> with TickerProviderStateMixin {
                                         textAlign: TextAlign.center,
                                         style: GoogleFonts.roboto(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 13,
+                                          fontSize: 15,
                                           color: Colors.redAccent,
                                         ),
                                       ),
@@ -468,8 +468,8 @@ class _PandemicView extends State<PandemicView> with TickerProviderStateMixin {
                                         '${numberFormat.format((widget.info.activeCases * animationController.value).toInt())}',
                                         textAlign: TextAlign.center,
                                         style: GoogleFonts.roboto(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 13,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 15,
                                           color: Colors.deepOrangeAccent,
                                         ),
                                       ),

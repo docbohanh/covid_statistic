@@ -186,7 +186,7 @@ class AreaView extends StatelessWidget {
                         splashColor: AppTheme.nearlyDarkBlue.withOpacity(0.2),
                         onTap: () {},
                         child: Padding(
-                          padding: EdgeInsets.fromLTRB(14, 20, 14, 0),
+                          padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -203,7 +203,7 @@ class AreaView extends StatelessWidget {
                                 child: AutoSizeText(
                                   "${preventions[index]["prevention"]}",
                                   textAlign: TextAlign.center,
-                                  style: GoogleFonts.montserrat(
+                                  style: GoogleFonts.roboto(
                                     fontSize: 14,
                                     color: Colors.black,
                                     fontWeight: FontWeight.w600,
@@ -223,7 +223,7 @@ class AreaView extends StatelessWidget {
                                 child: AutoSizeText(
                                   "${preventions[index]['desc']}",
                                   textAlign: TextAlign.center,
-                                  style: GoogleFonts.montserrat(
+                                  style: GoogleFonts.roboto(
                                     fontSize: 12,
                                     color: Colors.grey,
                                     fontWeight: FontWeight.w500,

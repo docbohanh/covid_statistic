@@ -79,7 +79,7 @@ Widget gradientAppbar(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [CustomColors.HeaderBlueDark, CustomColors.HeaderBlueLight],
+          colors: [Color(0xFF5C5EDD), Color(0xFF738AE6)],
         ),
         bottom: (bottom != null)
             ? PreferredSize(

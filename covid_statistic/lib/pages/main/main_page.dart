@@ -1,7 +1,7 @@
 import 'package:covid_statistic/helper/app_bar.dart';
 import 'package:covid_statistic/helper/color_loader.dart';
 import 'package:covid_statistic/helper/hud.dart';
-import 'package:covid_statistic/helper/local_dropdown.dart';
+import 'package:covid_statistic/helper/locale_dropdown.dart';
 import 'package:covid_statistic/helper/title_view.dart';
 import 'package:covid_statistic/model/covid_info.dart';
 import 'package:covid_statistic/model/country_info.dart';
@@ -59,7 +59,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
   }
 
   void addAllListData() {
-    const int count = 9;
+    const int count = 6;
 
     listViews.add(
       StreamBuilder<MainInfo>(
@@ -107,14 +107,17 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
 
     listViews.add(
       TitleView(
-        title: Text(
-          'Top Infected Countries',
-          textAlign: TextAlign.left,
-          style: GoogleFonts.roboto(
-            fontWeight: FontWeight.w500,
-            fontSize: 17,
-            letterSpacing: 0.5,
-            color: AppTheme.lightText,
+        title: GestureDetector(
+          onTap: () => viewModel.getCountryPandemic(),
+          child: Text(
+            'Top Infected Countries',
+            textAlign: TextAlign.left,
+            style: GoogleFonts.roboto(
+              fontWeight: FontWeight.w500,
+              fontSize: 17,
+              letterSpacing: 0.5,
+              color: AppTheme.lightText,
+            ),
           ),
         ),
         subTxt: 'More',
@@ -227,7 +230,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
             controller: scrollController,
             padding: EdgeInsets.only(
               top: MediaQuery.of(context).padding.top + 16,
-              bottom: 62 + MediaQuery.of(context).padding.bottom,
+              bottom: 24 + MediaQuery.of(context).padding.bottom,
             ),
             itemCount: listViews.length,
             scrollDirection: Axis.vertical,

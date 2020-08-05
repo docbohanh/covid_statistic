@@ -97,11 +97,11 @@ class RemoteAPI implements API {
   @override
   Future<List<CountryPandemic>> getCountryPandemic() async {
     try {
-      var response = await http
+      var res = await http
           .get("https://disease.sh/v3/covid-19/countries/")
           .then((r) => List<Map<String, dynamic>>.from(json.decode(r.body)));
-
-      return response.map((e) => CountryPandemic.fromJson(e)).toList();
+      logger.info(res.length);
+      return res.map((e) => CountryPandemic.fromJson(e)).toList();
     } catch (e) {
       logger.info("ERROR ${e.toString()}");
       throw e;

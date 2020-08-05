@@ -30,7 +30,7 @@ class _CountryStatsViewState extends State<CountryStatsView>
   void initState() {
     topCountriesData = widget.topCountriesData.take(10).toList();
     animationController = AnimationController(
-        duration: const Duration(milliseconds: 2000), vsync: this);
+        duration: const Duration(milliseconds: 1000), vsync: this);
     super.initState();
   }
 
@@ -118,11 +118,11 @@ class CountryInfoView extends StatelessWidget {
             transform: Matrix4.translationValues(
                 100 * (1.0 - animation.value), 0.0, 0.0),
             child: SizedBox(
-              width: 140,
+              width: 150,
               child: Stack(
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 8, 8, 32),
+                    padding: const EdgeInsets.fromLTRB(8, 8, 8, 24),
                     child: Container(
                       decoration: BoxDecoration(
                         boxShadow: <BoxShadow>[
@@ -143,7 +143,7 @@ class CountryInfoView extends StatelessWidget {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.only(
-                            top: 16, left: 16, right: 16, bottom: 8),
+                            top: 24, left: 16, right: 16, bottom: 8),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -166,12 +166,12 @@ class CountryInfoView extends StatelessWidget {
                                 color: Colors.white,
                               ),
                             ),
-                            SizedBox(height: 5),
+                            SizedBox(height: 3),
                             Text(
-                              '${formatter.format(country.cases)}',
+                              '${formatter.format((country.cases * animationController.value).toInt())}',
                               textAlign: TextAlign.center,
                               style: GoogleFonts.roboto(
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w600,
                                 fontSize: 17,
                                 letterSpacing: 0.2,
                                 color: Colors.white,
@@ -194,10 +194,10 @@ class CountryInfoView extends StatelessWidget {
                               '${country.newCasesToday}',
                               textAlign: TextAlign.center,
                               style: GoogleFonts.roboto(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 17,
+                                fontWeight: FontWeight.normal,
+                                fontSize: 15,
                                 letterSpacing: 0.2,
-                                color: Colors.white,
+                                color: Colors.amberAccent,
                               ),
                             ),
                           ],
