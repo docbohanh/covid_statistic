@@ -42,7 +42,7 @@ class _PandemicView extends State<PandemicView> with TickerProviderStateMixin {
 
     super.initState();
 
-    widget.viewModel.refreshStream.listen((isRefresh) {
+    widget.viewModel.refreshStatsStream.listen((isRefresh) {
       if (!isRefresh) {
         _initAnimation();
         animationController.forward();
@@ -325,7 +325,7 @@ class _PandemicView extends State<PandemicView> with TickerProviderStateMixin {
                                       width: 32,
                                       height: 32,
                                       child: StreamBuilder(
-                                        stream: widget.viewModel.refreshStream,
+                                        stream: widget.viewModel.refreshStatsStream,
                                         initialData: false,
                                         builder: (context,
                                             AsyncSnapshot<bool> snapshot) {

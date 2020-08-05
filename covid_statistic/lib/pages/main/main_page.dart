@@ -6,10 +6,13 @@ import 'package:covid_statistic/helper/title_view.dart';
 import 'package:covid_statistic/model/covid_info.dart';
 import 'package:covid_statistic/model/country_info.dart';
 import 'package:covid_statistic/model/main_info.dart';
+import 'package:covid_statistic/network/response/covid_res.dart';
+import 'package:covid_statistic/network/response/response.dart';
 import 'package:covid_statistic/pages/main/main_drop.dart';
 import 'package:covid_statistic/pages/main/precautions/precaution_grid.dart';
 import 'package:covid_statistic/pages/main/stats/pandemic_view.dart';
 import 'package:covid_statistic/pages/main/top_country/country_stats.dart';
+import 'package:covid_statistic/pages/main/top_country/top_country.dart';
 import 'package:covid_statistic/utils/app_theme.dart';
 import 'package:covid_statistic/utils/constant.dart';
 import 'package:covid_statistic/utils/local_utils.dart';
@@ -41,12 +44,10 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
 
     addAllListData();
 
-    viewModel.mainInfoStream.listen((_) => refreshPandemicInfo());
+    viewModel.mainInfoStream
+        .listen((_) => viewModel.fetchedStatistic(updateOther: true));
 
     super.initState();
-
-    viewModel.getCountryPandemic();
-
   }
 
   void refreshPandemicInfo() {
@@ -72,10 +73,11 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
               onChanged: viewModel.mainInfoChanged,
             ),
             subTxt: 'Details',
-            animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-                parent: animationController,
-                curve:
-                Interval((1 / count) * 0, 1.0, curve: Curves.fastOutSlowIn))),
+            animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+                CurvedAnimation(
+                    parent: animationController,
+                    curve: Interval((1 / count) * 0, 1.0,
+                        curve: Curves.fastOutSlowIn))),
             animationController: animationController,
             onViewMore: () {
               Utilities.launchURL(context, url: viewModel.mainInfoItem.link);
@@ -90,10 +92,11 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
         stream: viewModel.pandemicInfo,
         builder: (context, AsyncSnapshot<CovidInfo> snapshot) {
           return PandemicView(
-            animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-                parent: animationController,
-                curve:
-                Interval((1 / count) * 1, 1.0, curve: Curves.fastOutSlowIn))),
+            animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+                CurvedAnimation(
+                    parent: animationController,
+                    curve: Interval((1 / count) * 1, 1.0,
+                        curve: Curves.fastOutSlowIn))),
             info: (snapshot.data != null) ? snapshot.data : CovidInfo.mock48,
             onRefresh: () => refreshPandemicInfo(),
             viewModel: viewModel,
@@ -108,16 +111,30 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
     listViews.add(
       TitleView(
         title: GestureDetector(
-          onTap: () => viewModel.getCountryPandemic(),
-          child: Text(
-            'Top Infected Countries',
-            textAlign: TextAlign.left,
-            style: GoogleFonts.roboto(
-              fontWeight: FontWeight.w500,
-              fontSize: 17,
-              letterSpacing: 0.5,
-              color: AppTheme.lightText,
-            ),
+          onTap: () => viewModel.fetchedStatistic(),
+          child: StreamBuilder(
+            stream: viewModel.refreshCountryStream,
+            initialData: false,
+            builder: (context,
+                AsyncSnapshot<bool> snapshot) {
+              if (!snapshot.hasData ||
+                  !snapshot.data) {
+                return Text(
+                  'Top Infected Countries',
+                  textAlign: TextAlign.left,
+                  style: GoogleFonts.roboto(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 17,
+                    letterSpacing: 0.5,
+                    color: AppTheme.lightText,
+                  ),
+                );
+              }
+              return Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: CupertinoActivityIndicator(),
+              );
+            },
           ),
         ),
         subTxt: 'More',
@@ -127,30 +144,49 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: animationController,
             curve:
-            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+                Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: animationController,
       ),
     );
 
-    listViews.add(
-      StreamBuilder(
-        stream: viewModel.countryPandemicStream,
-        builder: (context, AsyncSnapshot<List<CountryPandemic>> snapshot) {
-          if (!snapshot.hasData || snapshot.data == null) {
-            return SizedBox();
-          }
-          return CountryStatsView(
-            animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-                CurvedAnimation(
-                    parent: animationController,
-                    curve: Interval((1 / count) * 3, 1.0,
-                        curve: Curves.fastOutSlowIn))),
-            animationController: animationController,
-            topCountriesData: snapshot.data,
-          );
-        },
-      )
-    );
+//    listViews.add(
+//      StreamBuilder(
+//        stream: viewModel.countryPandemicStream,
+//        builder: (context, AsyncSnapshot<List<CountryPandemic>> snapshot) {
+//          if (!snapshot.hasData || snapshot.data == null) {
+//            return SizedBox();
+//          }
+//          return CountryStatsView(
+//            animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+//                CurvedAnimation(
+//                    parent: animationController,
+//                    curve: Interval((1 / count) * 3, 1.0,
+//                        curve: Curves.fastOutSlowIn))),
+//            animationController: animationController,
+//            topCountriesData: snapshot.data,
+//          );
+//        },
+//      )
+//    );
+
+    listViews.add(StreamBuilder(
+      stream: viewModel.pandemicStatsStream,
+      builder: (context, AsyncSnapshot<CovidStatsResponse> snapshot) {
+        if (!snapshot.hasData || snapshot.data == null) {
+          return SizedBox();
+        }
+        return TopCountryView(
+          animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+              CurvedAnimation(
+                  parent: animationController,
+                  curve: Interval((1 / count) * 3, 1.0,
+                      curve: Curves.fastOutSlowIn))),
+          animationController: animationController,
+          topCountriesData: snapshot.data.topInfectedCountries(),
+          viewModel: viewModel,
+        );
+      },
+    ));
 
     listViews.add(
       TitleView(
@@ -171,18 +207,17 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: animationController,
             curve:
-            Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
+                Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: animationController,
       ),
     );
 
     listViews.add(
       AreaListView(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-            CurvedAnimation(
-                parent: animationController,
-                curve: Interval((1 / count) * 5, 1.0,
-                    curve: Curves.fastOutSlowIn))),
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: animationController,
+            curve:
+                Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: animationController,
       ),
     );
@@ -201,9 +236,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
           appBar: gradientAppbar(height: 54, actions: [
             LocaleDropDown(
               locale: LocalizationUtils.getLocale(Constant.defaultLocaleKey),
-              onChanged: (String newValue) {
-
-              },
+              onChanged: (String newValue) {},
             )
           ]),
           body: Stack(

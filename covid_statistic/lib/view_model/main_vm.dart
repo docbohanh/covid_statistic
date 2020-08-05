@@ -9,9 +9,10 @@ import 'base_vm.dart';
 class MainViewModel extends BaseViewModel {
   final BehaviorSubject<CovidStatsResponse> _statsResponse = BehaviorSubject();
   final BehaviorSubject<CovidInfo> _pandemicResponse = BehaviorSubject();
-  final BehaviorSubject<bool> _refresh = BehaviorSubject();
+  final BehaviorSubject<bool> _refreshStats = BehaviorSubject();
   final BehaviorSubject<MainInfo> _mainInfo = BehaviorSubject();
   final BehaviorSubject<List<CountryPandemic>> _countryPandemic = BehaviorSubject();
+  final BehaviorSubject<bool> _refreshCountryList = BehaviorSubject();
 
   MainViewModel() {
     mainInfoChanged(MainInfo.world);
@@ -19,22 +20,26 @@ class MainViewModel extends BaseViewModel {
 
   Function(CovidStatsResponse) get statsResponse => _statsResponse.sink.add;
   Function(CovidInfo) get pandemicResponse => _pandemicResponse.sink.add;
-  Function(bool) get onRefresh => _refresh.sink.add;
+  Function(bool) get onRefreshStats => _refreshStats.sink.add;
   Function(MainInfo) get mainInfoChanged => _mainInfo.sink.add;
   Function(List<CountryPandemic>) get countryPandemicChanged => _countryPandemic.sink.add;
+  Function(bool) get onRefreshCountryList => _refreshCountryList.sink.add;
 
-  Stream<CovidStatsResponse> get pandemicStats => _statsResponse.stream;
+  Stream<CovidStatsResponse> get pandemicStatsStream => _statsResponse.stream;
   Stream<CovidInfo> get pandemicInfo => _pandemicResponse.stream;
-  Stream<bool> get refreshStream => _refresh.stream;
+  Stream<bool> get refreshStatsStream => _refreshStats.stream;
   Stream<MainInfo> get mainInfoStream => _mainInfo.stream;
   Stream<List<CountryPandemic>> get countryPandemicStream => _countryPandemic.stream;
+  Stream<bool> get refreshCountryStream => _refreshCountryList.stream;
 
   MainInfo get mainInfoItem => _mainInfo.value;
   List<CountryPandemic> get countryPandemic => _countryPandemic.value;
+  CovidStatsResponse get pandemicStats => _statsResponse.value;
 
   fetchedStatistic({bool updateOther = false}) async {
+    onRefreshCountryList(true);
+
     repo.getWorldometersInfo().then((value) {
-      statsResponse(value);
 
       if (updateOther) {
         if (mainInfoItem.isVN) {
@@ -42,7 +47,12 @@ class MainViewModel extends BaseViewModel {
         } else {
           pandemicResponse(value.worldInfo());
         }
+
+        onRefreshStats(false);
       }
+
+      statsResponse(value);
+      onRefreshCountryList(false);
 
     }).catchError((error) {
       errorEvent(error);
@@ -51,23 +61,25 @@ class MainViewModel extends BaseViewModel {
   }
 
   fetchedPandemicVN() {
-    onRefresh(true);
+    onRefreshStats(true);
     repo.getPandemicVN().then((value) {
       pandemicResponse(value);
-      onRefresh(false);
+      onRefreshStats(false);
     }).catchError((error) {
       errorEvent(error);
+      onRefreshStats(false);
       pandemicResponse(null);
     });
   }
 
   fetchedPandemicWorld() {
-    onRefresh(true);
+    onRefreshStats(true);
     repo.getPandemicWorld().then((value) {
       pandemicResponse(value);
-      onRefresh(false);
+      onRefreshStats(false);
     }).catchError((error) {
       errorEvent(error);
+      onRefreshStats(false);
       pandemicResponse(null);
     });
   }
@@ -88,8 +100,9 @@ class MainViewModel extends BaseViewModel {
     super.dispose();
     _statsResponse.close();
     _pandemicResponse.close();
-    _refresh.close();
+    _refreshStats.close();
     _mainInfo.close();
     _countryPandemic.close();
+    _refreshCountryList.close();
   }
 }
