@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class CountryPandemic {
   int cases;
   int todayCases;
@@ -45,8 +47,15 @@ class CountryPandemic {
   }
 
   String get newCasesToday {
+    final formatter = NumberFormat("#,###");
     if (todayCases == 0) return '';
-    return '+$todayCases';
+    return '+${formatter.format(todayCases)}';
+  }
+
+  String get newDeathsToday {
+    final formatter = NumberFormat("#,###");
+    if (todayDeaths == 0) return '';
+    return '+${formatter.format(todayDeaths)}';
   }
 }
 

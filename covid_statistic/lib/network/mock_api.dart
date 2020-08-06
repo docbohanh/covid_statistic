@@ -26,7 +26,7 @@ class MockAPI implements API {
   }
 
   @override
-  Future<List<CountryPandemic>> getCountryPandemic() {
+  Future<List<CountryPandemic>> getCountryDiseaseV3() {
     // TODO: implement getCountryPandemic
     throw UnimplementedError();
   }

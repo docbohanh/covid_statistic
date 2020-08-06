@@ -16,5 +16,5 @@ abstract class API {
 
   Future<CovidInfo> getPandemicVN();
 
-  Future<List<CountryPandemic>> getCountryPandemic();
+  Future<List<CountryPandemic>> getCountryDiseaseV3();
 }

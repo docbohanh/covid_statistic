@@ -6,13 +6,10 @@ import 'package:covid_statistic/helper/title_view.dart';
 import 'package:covid_statistic/model/covid_info.dart';
 import 'package:covid_statistic/model/country_info.dart';
 import 'package:covid_statistic/model/main_info.dart';
-import 'package:covid_statistic/network/response/covid_res.dart';
-import 'package:covid_statistic/network/response/response.dart';
 import 'package:covid_statistic/pages/main/main_drop.dart';
 import 'package:covid_statistic/pages/main/precautions/precaution_grid.dart';
 import 'package:covid_statistic/pages/main/stats/pandemic_view.dart';
 import 'package:covid_statistic/pages/main/top_country/country_stats.dart';
-import 'package:covid_statistic/pages/main/top_country/top_country.dart';
 import 'package:covid_statistic/utils/app_theme.dart';
 import 'package:covid_statistic/utils/constant.dart';
 import 'package:covid_statistic/utils/local_utils.dart';
@@ -44,19 +41,22 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
 
     addAllListData();
 
-    viewModel.mainInfoStream
-        .listen((_) => viewModel.fetchedStatistic(updateOther: true));
+    viewModel.mainInfoStream.listen((mainInfo) {
+      if (viewModel.pandemicStats == null) {
+        viewModel.fetchedStatistic(updateOther: true);
+      } else {
+        viewModel.updateMainInfoPandemic();
+      }
+    });
 
     super.initState();
+
+    viewModel.getCountryPandemic();
   }
 
   void refreshPandemicInfo() {
     logger.info('refreshPandemicInfo');
-    if (viewModel.mainInfoItem.isVN) {
-      viewModel.fetchedPandemicVN();
-    } else {
-      viewModel.fetchedPandemicWorld();
-    }
+    viewModel.refreshMainInfoPandemic();
   }
 
   void addAllListData() {
@@ -111,14 +111,12 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
     listViews.add(
       TitleView(
         title: GestureDetector(
-          onTap: () => viewModel.fetchedStatistic(),
+          onTap: () => viewModel.getCountryPandemic(),
           child: StreamBuilder(
             stream: viewModel.refreshCountryStream,
             initialData: false,
-            builder: (context,
-                AsyncSnapshot<bool> snapshot) {
-              if (!snapshot.hasData ||
-                  !snapshot.data) {
+            builder: (context, AsyncSnapshot<bool> snapshot) {
+              if (!snapshot.hasData || !snapshot.data) {
                 return Text(
                   'Top Infected Countries',
                   textAlign: TextAlign.left,
@@ -126,7 +124,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
                     fontWeight: FontWeight.w500,
                     fontSize: 17,
                     letterSpacing: 0.5,
-                    color: AppTheme.lightText,
+                    color: AppTheme.nearlyDarkBlue,
                   ),
                 );
               }
@@ -139,7 +137,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
         ),
         subTxt: 'More',
         onViewMore: () {
-          HUD.showMessage(context, text: 'View more');
+          HUD.showMessage(context, text: 'See more at https://disease.sh/v3');
         },
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: animationController,
@@ -149,40 +147,20 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
       ),
     );
 
-//    listViews.add(
-//      StreamBuilder(
-//        stream: viewModel.countryPandemicStream,
-//        builder: (context, AsyncSnapshot<List<CountryPandemic>> snapshot) {
-//          if (!snapshot.hasData || snapshot.data == null) {
-//            return SizedBox();
-//          }
-//          return CountryStatsView(
-//            animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-//                CurvedAnimation(
-//                    parent: animationController,
-//                    curve: Interval((1 / count) * 3, 1.0,
-//                        curve: Curves.fastOutSlowIn))),
-//            animationController: animationController,
-//            topCountriesData: snapshot.data,
-//          );
-//        },
-//      )
-//    );
-
     listViews.add(StreamBuilder(
-      stream: viewModel.pandemicStatsStream,
-      builder: (context, AsyncSnapshot<CovidStatsResponse> snapshot) {
+      stream: viewModel.countryPandemicStream,
+      builder: (context, AsyncSnapshot<List<CountryPandemic>> snapshot) {
         if (!snapshot.hasData || snapshot.data == null) {
           return SizedBox();
         }
-        return TopCountryView(
+        return CountryStatsView(
           animation: Tween<double>(begin: 0.0, end: 1.0).animate(
               CurvedAnimation(
                   parent: animationController,
                   curve: Interval((1 / count) * 3, 1.0,
                       curve: Curves.fastOutSlowIn))),
           animationController: animationController,
-          topCountriesData: snapshot.data.topInfectedCountries(),
+          topCountriesData: snapshot.data,
           viewModel: viewModel,
         );
       },

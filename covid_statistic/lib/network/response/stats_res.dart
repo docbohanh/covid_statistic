@@ -1,4 +1,5 @@
 import 'package:covid_statistic/model/covid_info.dart';
+import 'package:covid_statistic/model/main_info.dart';
 import 'package:covid_statistic/network/response/response.dart';
 
 class CovidStatsResponse implements BaseResponse<List<CovidInfo>> {
@@ -40,6 +41,11 @@ class CovidStatsResponse implements BaseResponse<List<CovidInfo>> {
 
   CovidInfo worldInfo() {
     var info = data.where((e) => e.country.contains('World'));
+    return info.first;
+  }
+
+  CovidInfo countryInfo(MainInfo mainInfo) {
+    var info = data.where((e) => e.country.contains(mainInfo.name));
     return info.first;
   }
 

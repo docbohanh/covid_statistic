@@ -42,7 +42,7 @@ class MainDropdown extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                       fontSize: 17,
                       letterSpacing: 0.5,
-                      color: AppTheme.lightText,
+                      color: AppTheme.nearlyDarkBlue,
                     ),
                   ),
                 ],

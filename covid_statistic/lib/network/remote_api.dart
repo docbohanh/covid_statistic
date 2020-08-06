@@ -67,7 +67,7 @@ class RemoteAPI implements API {
   Future<CountryPandemic> getWorldInfo() async {
     try {
       var response = await http
-          .get('https://disease.sh/v2/countries')
+          .get('https://disease.sh/v3/covid-19/all')
           .then((r) => Map<String, dynamic>.from(json.decode(r.body)));
 
       CountryPandemic info = CountryPandemic.fromJson(response);
@@ -95,7 +95,7 @@ class RemoteAPI implements API {
   }
 
   @override
-  Future<List<CountryPandemic>> getCountryPandemic() async {
+  Future<List<CountryPandemic>> getCountryDiseaseV3() async {
     try {
       var res = await http
           .get("https://disease.sh/v3/covid-19/countries/")

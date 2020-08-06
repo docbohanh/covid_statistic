@@ -84,7 +84,7 @@ class _AreaListViewState extends State<AreaListView>
                 padding: const EdgeInsets.only(left: 8.0, right: 8),
                 child: GridView(
                   padding: const EdgeInsets.only(
-                      left: 16, right: 16, top: 16, bottom: 16),
+                      left: 16, right: 16, top: 4, bottom: 16),
                   physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   children: List<Widget>.generate(

@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:covid_statistic/model/color_data.dart';
 import 'package:covid_statistic/model/country_info.dart';
+import 'package:covid_statistic/view_model/main_vm.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -11,11 +13,13 @@ class CountryStatsView extends StatefulWidget {
     this.animationController,
     this.animation,
     this.topCountriesData,
+    this.viewModel,
   }) : super(key: key);
 
   final AnimationController animationController;
   final Animation<dynamic> animation;
   final List<CountryPandemic> topCountriesData;
+  final MainViewModel viewModel;
 
   @override
   _CountryStatsViewState createState() => _CountryStatsViewState();
@@ -29,14 +33,22 @@ class _CountryStatsViewState extends State<CountryStatsView>
   @override
   void initState() {
     topCountriesData = widget.topCountriesData.take(10).toList();
-    animationController = AnimationController(
-        duration: const Duration(milliseconds: 1000), vsync: this);
+    _initAnimation();
     super.initState();
+
+    widget.viewModel.refreshCountryStream.listen((isRefresh) {
+      if (!isRefresh) {
+        _initAnimation();
+        topCountriesData = widget.viewModel.countryPandemic.take(10).toList();
+        setState(() {});
+        animationController.forward();
+      }
+    });
   }
 
-  Future<bool> getData() async {
-    await Future<dynamic>.delayed(const Duration(milliseconds: 50));
-    return true;
+  _initAnimation() {
+    animationController = AnimationController(
+        duration: const Duration(milliseconds: 1000), vsync: this);
   }
 
   @override
@@ -177,28 +189,51 @@ class CountryInfoView extends StatelessWidget {
                                 color: Colors.white,
                               ),
                             ),
-                            Expanded(
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 8, bottom: 8),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(''),
-                                  ],
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  '${country.newCasesToday}',
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.roboto(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 15,
+                                    letterSpacing: 0.2,
+                                    color: Colors.amberAccent,
+                                  ),
                                 ),
-                              ),
+                                country.todayCases > 0 ?
+                                SizedBox(
+                                  width: 12,
+                                  child: Image.asset(
+                                    "assets/icon/cough.png",
+                                  ),
+                                ) : SizedBox()
+                              ],
                             ),
-                            Text(
-                              '${country.newCasesToday}',
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.roboto(
-                                fontWeight: FontWeight.normal,
-                                fontSize: 15,
-                                letterSpacing: 0.2,
-                                color: Colors.amberAccent,
-                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  '${country.newDeathsToday}',
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.roboto(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 14,
+                                    letterSpacing: 0.2,
+                                    color: Colors.white70,
+                                  ),
+                                ),
+                                country.todayDeaths > 0 ?
+                                SizedBox(
+                                  width: 11,
+                                  child: Image.asset(
+                                    "assets/icon/skull2.png",
+                                  ),
+                                ) : SizedBox()
+                              ],
                             ),
                           ],
                         ),

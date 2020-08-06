@@ -42,11 +42,7 @@ class MainViewModel extends BaseViewModel {
     repo.getWorldometersInfo().then((value) {
 
       if (updateOther) {
-        if (mainInfoItem.isVN) {
-          pandemicResponse(value.vietnamInfo());
-        } else {
-          pandemicResponse(value.worldInfo());
-        }
+        pandemicResponse(value.countryInfo(mainInfoItem));
 
         onRefreshStats(false);
       }
@@ -60,35 +56,31 @@ class MainViewModel extends BaseViewModel {
     });
   }
 
-  fetchedPandemicVN() {
+  refreshMainInfoPandemic() async {
     onRefreshStats(true);
-    repo.getPandemicVN().then((value) {
-      pandemicResponse(value);
+    repo.getWorldometersInfo().then((value) {
       onRefreshStats(false);
+      statsResponse(value);
+      pandemicResponse(value.countryInfo(mainInfoItem));
+
     }).catchError((error) {
       errorEvent(error);
-      onRefreshStats(false);
-      pandemicResponse(null);
+      statsResponse(null);
     });
   }
 
-  fetchedPandemicWorld() {
-    onRefreshStats(true);
-    repo.getPandemicWorld().then((value) {
-      pandemicResponse(value);
-      onRefreshStats(false);
-    }).catchError((error) {
-      errorEvent(error);
-      onRefreshStats(false);
-      pandemicResponse(null);
-    });
+  void updateMainInfoPandemic() {
+    pandemicResponse(pandemicStats.countryInfo(mainInfoItem));
+    onRefreshStats(false);
   }
 
   void getCountryPandemic() {
-    repo.getCountryPandemic().then((value) {
+    onRefreshCountryList(true);
+    repo.getCountryDiseaseV3().then((value) {
       var data = value;
       data.sort((l, r) => r.cases.compareTo(l.cases));
       countryPandemicChanged(data.toList());
+      onRefreshCountryList(false);
     }).catchError((e) {
       errorEvent(error);
       countryPandemicChanged([]);
