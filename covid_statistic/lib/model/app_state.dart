@@ -1,5 +1,5 @@
 import 'package:covid_statistic/network/api.dart';
-import 'package:covid_statistic/utils/app_theme.dart';
+import 'package:covid_statistic/utils/themes/app_theme.dart';
 import 'package:covid_statistic/utils/constant.dart';
 import 'package:covid_statistic/utils/utility.dart';
 import 'package:frideos/frideos.dart';

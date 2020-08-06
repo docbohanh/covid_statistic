@@ -28,6 +28,19 @@ class S implements WidgetsLocalizations {
   String get more => 'More';
   String get topInfectedCountries => 'Top Infected Countries';
   String get precautions => 'Precautions';
+
+  String get protectiveMask => 'Protective Mask';
+  String get protectiveMaskDesc => 'Always remember to wear a protective mask when stepping out.';
+  String get washHands => 'Wash Hands';
+  String get washHandsDesc => 'Wash your hands often with soap and water and for 20 seconds at least.';
+  String get coverCough => 'Cover Cough';
+  String get coverCoughDesc => 'Cough or sneeze into your elbow or cover your mouth with a disposable napkin.';
+  String get sanitizeOften => 'Sanitize Often';
+  String get sanitizeOftenDesc => 'Use alchohol based sanitizer if water and soap are unavailable.';
+  String get noFaceTouching => 'No Face Touching';
+  String get noFaceTouchingDesc => 'Don\'t touch your eyes, nose or mouth often and with unwashed hands.';
+  String get socialDistancing => 'Social Distancing';
+  String get socialDistancingDesc => 'Keep 7m distance from other people. Stay at home and avoid gatherings.';
 }
 
 class $vi extends S {
@@ -42,11 +55,24 @@ class $vi extends S {
   @override String get totalDeaths => 'Đã tử vong';
   @override String get recovered => 'Chữa khỏi';
   @override String get newCases => 'Mới nhiễm';
-  @override String get newDeaths => 'Mới tử vong';
+  @override String get newDeaths => 'Mới báo tử';
   @override String get activeCases => 'Đang điều trị';
   @override String get more => 'Xem thêm';
   @override String get topInfectedCountries => 'Quốc gia lây nhiễm cao';
   @override String get precautions => 'Biện pháp phòng ngừa';
+
+  @override String get protectiveMask => 'Đeo khẩu trang';
+  @override String get protectiveMaskDesc => 'Luôn luôn đẹo khẩu trang khi ra ngoài';
+  @override String get washHands => 'Rửa tay';
+  @override String get washHandsDesc => 'Rửa tay thường xuyên với xà bông ít nhất 20 giây';
+  @override String get coverCough => 'Che miệng khi ho';
+  @override String get coverCoughDesc => 'Dùng khuỷu tay hoặc giấy ăn dùng một lần để che miệng khi ho hoặc hắt hơi';
+  @override String get sanitizeOften => 'Khử trùng';
+  @override String get sanitizeOftenDesc => 'Sử dụng chất khử trùng có cồn nếu không có nước và xà phòng.';
+  @override String get noFaceTouching => 'Tránh đưa tay lên mặt';
+  @override String get noFaceTouchingDesc => 'Hạn chế đưa tay lên mắt, mũi và miệng.';
+  @override String get socialDistancing => 'Giữ khoảng cách';
+  @override String get socialDistancingDesc => 'Giữ khoảng cách 7m với mọi người. Nên ở nhà và tránh tụ tập.';
 }
 
 class $en extends S {

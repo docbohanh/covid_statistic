@@ -1,6 +1,7 @@
+import 'package:covid_statistic/generated/i18n.dart';
 import 'package:covid_statistic/helper/curve_painter.dart';
 import 'package:covid_statistic/model/covid_info.dart';
-import 'package:covid_statistic/utils/app_theme.dart';
+import 'package:covid_statistic/utils/themes/app_theme.dart';
 import 'package:covid_statistic/utils/custom_colors.dart';
 import 'package:covid_statistic/view_model/main_vm.dart';
 import 'package:flutter/cupertino.dart';
@@ -121,7 +122,7 @@ class _PandemicView extends State<PandemicView> with TickerProviderStateMixin {
                                               padding: const EdgeInsets.only(
                                                   bottom: 2),
                                               child: Text(
-                                                'Total Cases',
+                                                S.of(context).totalCases,
                                                 textAlign: TextAlign.center,
                                                 style: GoogleFonts.roboto(
                                                   fontWeight: FontWeight.w500,
@@ -193,7 +194,7 @@ class _PandemicView extends State<PandemicView> with TickerProviderStateMixin {
                                               padding: const EdgeInsets.only(
                                                   bottom: 2),
                                               child: Text(
-                                                'Total Deaths',
+                                                S.of(context).totalDeaths,
                                                 textAlign: TextAlign.center,
                                                 style: GoogleFonts.roboto(
                                                   fontWeight: FontWeight.w500,
@@ -281,7 +282,7 @@ class _PandemicView extends State<PandemicView> with TickerProviderStateMixin {
                                           ),
                                         ),
                                         Text(
-                                          'Recovered',
+                                          S.of(context).recovered,
                                           textAlign: TextAlign.center,
                                           style: GoogleFonts.roboto(
                                             fontWeight: FontWeight.bold,
@@ -382,7 +383,7 @@ class _PandemicView extends State<PandemicView> with TickerProviderStateMixin {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  'New Cases',
+                                  S.of(context).newCases,
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.roboto(
                                     fontWeight: FontWeight.w500,
@@ -416,7 +417,7 @@ class _PandemicView extends State<PandemicView> with TickerProviderStateMixin {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
                                     Text(
-                                      'New Deaths',
+                                      S.of(context).newDeaths,
                                       textAlign: TextAlign.center,
                                       style: GoogleFonts.roboto(
                                         fontWeight: FontWeight.w500,
@@ -453,7 +454,7 @@ class _PandemicView extends State<PandemicView> with TickerProviderStateMixin {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
                                     Text(
-                                      'Active Cases',
+                                      S.of(context).activeCases,
                                       style: GoogleFonts.roboto(
                                         fontWeight: FontWeight.w500,
                                         fontSize: 13,

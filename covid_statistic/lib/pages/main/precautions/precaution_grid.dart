@@ -1,51 +1,21 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:covid_statistic/utils/app_theme.dart';
+import 'package:covid_statistic/generated/i18n.dart';
+import 'package:covid_statistic/model/prevention.dart';
+import 'package:covid_statistic/utils/themes/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-final List<Map<String, String>> preventions = const [
-  {
-    "prevention": "Protective Mask",
-    "desc": "Always remember to wear a protective mask when stepping out.",
-    "imgPath": "assets/prevention/mask.png",
-  },
-  {
-    "prevention": "Wash Hands",
-    "desc":
-        "Wash your hands often with soap and water and for 20 seconds at least.",
-    "imgPath": "assets/prevention/wash.png",
-  },
-  {
-    "prevention": "Cover Cough",
-    "desc":
-        "Cough or sneeze into your elbow or cover your mouth with a disposable napkin.",
-    "imgPath": "assets/prevention/coughCover.png",
-  },
-  {
-    "prevention": "Sanitize Often",
-    "desc": "Use alchohol based sanitizer if water and soap are unavailable.",
-    "imgPath": "assets/prevention/sanitizer.png",
-  },
-  {
-    "prevention": "No Face Touching",
-    "desc":
-        "Don't touch your eyes, nose or mouth often and with unwashed hands.",
-    "imgPath": "assets/prevention/touch.png",
-  },
-  {
-    "prevention": "Social Distancing",
-    "desc":
-        "Keep 7m distance from other people. Stay at home and avoid gatherings.",
-    "imgPath": "assets/prevention/socialDistance.png",
-  },
-];
-
 class AreaListView extends StatefulWidget {
-  const AreaListView({Key key, this.animationController, this.animation})
-      : super(key: key);
+  const AreaListView({
+    Key key,
+    this.animationController,
+    this.animation,
+    this.preventions,
+  }) : super(key: key);
 
   final AnimationController animationController;
   final Animation<dynamic> animation;
+  final List<Prevention> preventions;
 
   @override
   _AreaListViewState createState() => _AreaListViewState();
@@ -54,6 +24,8 @@ class AreaListView extends StatefulWidget {
 class _AreaListViewState extends State<AreaListView>
     with TickerProviderStateMixin {
   AnimationController animationController;
+
+  List<Prevention> preventions = [];
 
   @override
   void initState() {
@@ -70,6 +42,35 @@ class _AreaListViewState extends State<AreaListView>
 
   @override
   Widget build(BuildContext context) {
+    if (preventions.isEmpty) {
+      preventions = [
+        Prevention(
+            prevention: S.of(context).protectiveMask,
+            description: S.of(context).protectiveMaskDesc,
+            imagePath: 'assets/prevention/mask.png'),
+        Prevention(
+            prevention: S.of(context).washHands,
+            description: S.of(context).washHandsDesc,
+            imagePath: 'assets/prevention/wash.png'),
+        Prevention(
+            prevention: S.of(context).coverCough,
+            description: S.of(context).coverCoughDesc,
+            imagePath: 'assets/prevention/coughCover.png'),
+        Prevention(
+            prevention: S.of(context).sanitizeOften,
+            description: S.of(context).sanitizeOftenDesc,
+            imagePath: 'assets/prevention/sanitizer.png'),
+        Prevention(
+            prevention: S.of(context).noFaceTouching,
+            description: S.of(context).noFaceTouchingDesc,
+            imagePath: 'assets/prevention/touch.png'),
+        Prevention(
+            prevention: S.of(context).socialDistancing,
+            description: S.of(context).socialDistancingDesc,
+            imagePath: 'assets/prevention/socialDistance.png'),
+      ];
+    }
+
     return AnimatedBuilder(
       animation: widget.animationController,
       builder: (BuildContext context, Widget child) {
@@ -104,6 +105,7 @@ class _AreaListViewState extends State<AreaListView>
                         index: index,
                         animation: animation,
                         animationController: animationController,
+                        precaution: preventions[index],
                       );
                     },
                   ),
@@ -129,11 +131,13 @@ class AreaView extends StatelessWidget {
     this.index,
     this.animationController,
     this.animation,
+    this.precaution,
   }) : super(key: key);
 
   final int index;
   final AnimationController animationController;
   final Animation<dynamic> animation;
+  final Prevention precaution;
 
   static AutoSizeGroup titleGrp = AutoSizeGroup();
   static AutoSizeGroup descGrp = AutoSizeGroup();
@@ -192,7 +196,7 @@ class AreaView extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: <Widget>[
                               Image(
-                                image: AssetImage(preventions[index]["imgPath"]),
+                                image: AssetImage(precaution.imagePath),
                                 height: constraint.maxHeight * 0.46,
                               ),
                               SizedBox(
@@ -201,7 +205,7 @@ class AreaView extends StatelessWidget {
                               LimitedBox(
                                 maxHeight: constraint.maxHeight * 0.1,
                                 child: AutoSizeText(
-                                  "${preventions[index]["prevention"]}",
+                                  "${precaution.prevention}",
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.roboto(
                                     fontSize: 14,
@@ -221,7 +225,7 @@ class AreaView extends StatelessWidget {
                               LimitedBox(
                                 maxHeight: constraint.maxHeight * 0.30,
                                 child: AutoSizeText(
-                                  "${preventions[index]['desc']}",
+                                  "${precaution.description}",
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.roboto(
                                     fontSize: 12,

@@ -35,6 +35,7 @@ class MainViewModel extends BaseViewModel {
   MainInfo get mainInfoItem => _mainInfo.value;
   List<CountryPandemic> get countryPandemic => _countryPandemic.value;
   CovidStatsResponse get pandemicStats => _statsResponse.value;
+  CovidInfo get covidInfo => _pandemicResponse.value;
 
   fetchedStatistic({bool updateOther = false}) async {
     onRefreshCountryList(true);

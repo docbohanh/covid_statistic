@@ -1,6 +1,6 @@
 import 'package:covid_statistic/helper/spinning_widget.dart';
 import 'package:covid_statistic/model/localization.dart';
-import 'package:covid_statistic/utils/app_theme.dart';
+import 'package:covid_statistic/utils/themes/app_theme.dart';
 import 'package:covid_statistic/utils/constant.dart';
 import 'package:covid_statistic/utils/local_utils.dart';
 import 'package:covid_statistic/utils/utility.dart';

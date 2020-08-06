@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:covid_statistic/utils/app_theme.dart';
+import 'package:covid_statistic/utils/themes/app_theme.dart';
 import 'package:covid_statistic/utils/custom_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';

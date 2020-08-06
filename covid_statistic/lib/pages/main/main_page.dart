@@ -8,11 +8,13 @@ import 'package:covid_statistic/model/app_state.dart';
 import 'package:covid_statistic/model/covid_info.dart';
 import 'package:covid_statistic/model/country_info.dart';
 import 'package:covid_statistic/model/main_info.dart';
+import 'package:covid_statistic/model/prevention.dart';
 import 'package:covid_statistic/pages/main/main_drop.dart';
 import 'package:covid_statistic/pages/main/precautions/precaution_grid.dart';
 import 'package:covid_statistic/pages/main/stats/pandemic_view.dart';
 import 'package:covid_statistic/pages/main/top_country/country_stats.dart';
-import 'package:covid_statistic/utils/app_theme.dart';
+import 'package:covid_statistic/utils/themes/app_theme.dart';
+import 'package:covid_statistic/utils/constant.dart';
 import 'package:covid_statistic/utils/local_utils.dart';
 import 'package:covid_statistic/utils/utility.dart';
 import 'package:covid_statistic/view_model/main_vm.dart';
@@ -20,6 +22,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frideos/frideos.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key key}) : super(key: key);
@@ -50,8 +53,6 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
     });
 
     super.initState();
-
-    addAllListData();
     viewModel.getCountryPandemic();
   }
 
@@ -73,7 +74,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
               value: snapshot.data,
               onChanged: viewModel.mainInfoChanged,
             ),
-            subTxt: 'Details',
+            subTxt: S.of(context).details,
             animation: Tween<double>(begin: 0.0, end: 1.0).animate(
                 CurvedAnimation(
                     parent: animationController,
@@ -119,7 +120,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
             builder: (context, AsyncSnapshot<bool> snapshot) {
               if (!snapshot.hasData || !snapshot.data) {
                 return Text(
-                  'Top Infected Countries',
+                  S.of(context).topInfectedCountries,
                   textAlign: TextAlign.left,
                   style: GoogleFonts.roboto(
                     fontWeight: FontWeight.w500,
@@ -136,7 +137,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
             },
           ),
         ),
-        subTxt: 'More',
+        subTxt: S.of(context).more,
         onViewMore: () {
           HUD.showMessage(context, text: 'See more at https://disease.sh/v3');
         },
@@ -170,7 +171,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
     listViews.add(
       TitleView(
         title: Text(
-          'Precautions',
+          S.of(context).precautions,
           textAlign: TextAlign.left,
           style: GoogleFonts.roboto(
             fontWeight: FontWeight.w500,
@@ -179,7 +180,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
             color: AppTheme.lightText,
           ),
         ),
-        subTxt: 'More',
+        subTxt: S.of(context).more,
         onViewMore: () {
           HUD.showMessage(context, text: 'View more');
         },
@@ -198,12 +199,40 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
             curve:
                 Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: animationController,
+        preventions: [
+          Prevention(
+              prevention: S.of(context).protectiveMask,
+              description: S.of(context).protectiveMaskDesc,
+              imagePath: 'assets/prevention/mask.png'),
+          Prevention(
+              prevention: S.of(context).washHands,
+              description: S.of(context).washHandsDesc,
+              imagePath: 'assets/prevention/wash.png'),
+          Prevention(
+              prevention: S.of(context).coverCough,
+              description: S.of(context).coverCoughDesc,
+              imagePath: 'assets/prevention/coughCover.png'),
+          Prevention(
+              prevention: S.of(context).sanitizeOften,
+              description: S.of(context).sanitizeOftenDesc,
+              imagePath: 'assets/prevention/sanitizer.png'),
+          Prevention(
+              prevention: S.of(context).noFaceTouching,
+              description: S.of(context).noFaceTouchingDesc,
+              imagePath: 'assets/prevention/touch.png'),
+          Prevention(
+              prevention: S.of(context).socialDistancing,
+              description: S.of(context).socialDistancingDesc,
+              imagePath: 'assets/prevention/socialDistance.png'),
+        ],
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    if (listViews.isEmpty) addAllListData();
+
     final language = AppStateProvider.of<AppState>(context).languageCode;
 
     return WillPopScope(
@@ -220,8 +249,10 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
             actions: [
               LocaleDropDown(
                 locale: LocalizationUtils.locale(language.value),
-                onChanged: (String newValue) {
+                onChanged: (String newValue) async {
                   language.value = newValue;
+                  var prefs = await SharedPreferences.getInstance();
+                  prefs.setString(Constant.language, newValue);
                 },
               )
             ],
