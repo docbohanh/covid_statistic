@@ -1,5 +1,4 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:covid_statistic/generated/i18n.dart';
 import 'package:covid_statistic/model/prevention.dart';
 import 'package:covid_statistic/utils/themes/app_theme.dart';
 import 'package:flutter/material.dart';
@@ -25,8 +24,6 @@ class _AreaListViewState extends State<AreaListView>
     with TickerProviderStateMixin {
   AnimationController animationController;
 
-  List<Prevention> preventions = [];
-
   @override
   void initState() {
     animationController = AnimationController(
@@ -42,35 +39,6 @@ class _AreaListViewState extends State<AreaListView>
 
   @override
   Widget build(BuildContext context) {
-    if (preventions.isEmpty) {
-      preventions = [
-        Prevention(
-            prevention: S.of(context).protectiveMask,
-            description: S.of(context).protectiveMaskDesc,
-            imagePath: 'assets/prevention/mask.png'),
-        Prevention(
-            prevention: S.of(context).washHands,
-            description: S.of(context).washHandsDesc,
-            imagePath: 'assets/prevention/wash.png'),
-        Prevention(
-            prevention: S.of(context).coverCough,
-            description: S.of(context).coverCoughDesc,
-            imagePath: 'assets/prevention/coughCover.png'),
-        Prevention(
-            prevention: S.of(context).sanitizeOften,
-            description: S.of(context).sanitizeOftenDesc,
-            imagePath: 'assets/prevention/sanitizer.png'),
-        Prevention(
-            prevention: S.of(context).noFaceTouching,
-            description: S.of(context).noFaceTouchingDesc,
-            imagePath: 'assets/prevention/touch.png'),
-        Prevention(
-            prevention: S.of(context).socialDistancing,
-            description: S.of(context).socialDistancingDesc,
-            imagePath: 'assets/prevention/socialDistance.png'),
-      ];
-    }
-
     return AnimatedBuilder(
       animation: widget.animationController,
       builder: (BuildContext context, Widget child) {
@@ -89,9 +57,9 @@ class _AreaListViewState extends State<AreaListView>
                   physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   children: List<Widget>.generate(
-                    preventions.length,
+                    widget.preventions.length,
                     (int index) {
-                      final int count = preventions.length;
+                      final int count = widget.preventions.length;
                       final Animation<double> animation =
                           Tween<double>(begin: 0.0, end: 1.0).animate(
                         CurvedAnimation(
@@ -105,7 +73,7 @@ class _AreaListViewState extends State<AreaListView>
                         index: index,
                         animation: animation,
                         animationController: animationController,
-                        precaution: preventions[index],
+                        precaution: widget.preventions[index],
                       );
                     },
                   ),

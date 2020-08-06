@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 class TitleView extends StatelessWidget {
   final Widget title;
   final String subTxt;
+  final Widget subText;
   final AnimationController animationController;
   final Animation animation;
   final Function onViewMore;
@@ -13,6 +14,7 @@ class TitleView extends StatelessWidget {
     Key key,
     this.title,
     this.subTxt: "",
+    this.subText,
     this.animationController,
     this.onViewMore,
     this.animation,
@@ -44,7 +46,7 @@ class TitleView extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 8),
                         child: Row(
                           children: <Widget>[
-                            Text(
+                            (subText != null) ? subText : Text(
                               subTxt,
                               textAlign: TextAlign.left,
                               style: GoogleFonts.roboto(

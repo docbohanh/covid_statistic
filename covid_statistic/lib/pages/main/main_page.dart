@@ -137,7 +137,21 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
             },
           ),
         ),
-        subTxt: S.of(context).more,
+        subText: StreamBuilder(
+          stream: viewModel.multiLangStream,
+          builder: (context, AsyncSnapshot<String> snapshot) {
+            return Text(
+              S.of(context).more,
+              textAlign: TextAlign.left,
+              style: GoogleFonts.roboto(
+                fontWeight: FontWeight.normal,
+                fontSize: 15,
+                letterSpacing: 0.5,
+                color: AppTheme.nearlyDarkBlue,
+              ),
+            );
+          },
+        ),
         onViewMore: () {
           HUD.showMessage(context, text: 'See more at https://disease.sh/v3');
         },
@@ -169,63 +183,73 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
     ));
 
     listViews.add(
-      TitleView(
-        title: Text(
-          S.of(context).precautions,
-          textAlign: TextAlign.left,
-          style: GoogleFonts.roboto(
-            fontWeight: FontWeight.w500,
-            fontSize: 17,
-            letterSpacing: 0.5,
-            color: AppTheme.lightText,
-          ),
+        StreamBuilder(
+          stream: viewModel.multiLangStream,
+          builder: (context, AsyncSnapshot<String> snapshot) {
+            return TitleView(
+              title: Text(
+                S.of(context).precautions,
+                textAlign: TextAlign.left,
+                style: GoogleFonts.roboto(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 17,
+                  letterSpacing: 0.5,
+                  color: AppTheme.lightText,
+                ),
+              ),
+              subTxt: S.of(context).more,
+              onViewMore: () {
+                HUD.showMessage(context, text: 'View more');
+              },
+              animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                  parent: animationController,
+                  curve:
+                  Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
+              animationController: animationController,
+            );
+          },
         ),
-        subTxt: S.of(context).more,
-        onViewMore: () {
-          HUD.showMessage(context, text: 'View more');
-        },
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: animationController,
-            curve:
-                Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: animationController,
-      ),
     );
 
     listViews.add(
-      AreaListView(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: animationController,
-            curve:
-                Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: animationController,
-        preventions: [
-          Prevention(
-              prevention: S.of(context).protectiveMask,
-              description: S.of(context).protectiveMaskDesc,
-              imagePath: 'assets/prevention/mask.png'),
-          Prevention(
-              prevention: S.of(context).washHands,
-              description: S.of(context).washHandsDesc,
-              imagePath: 'assets/prevention/wash.png'),
-          Prevention(
-              prevention: S.of(context).coverCough,
-              description: S.of(context).coverCoughDesc,
-              imagePath: 'assets/prevention/coughCover.png'),
-          Prevention(
-              prevention: S.of(context).sanitizeOften,
-              description: S.of(context).sanitizeOftenDesc,
-              imagePath: 'assets/prevention/sanitizer.png'),
-          Prevention(
-              prevention: S.of(context).noFaceTouching,
-              description: S.of(context).noFaceTouchingDesc,
-              imagePath: 'assets/prevention/touch.png'),
-          Prevention(
-              prevention: S.of(context).socialDistancing,
-              description: S.of(context).socialDistancingDesc,
-              imagePath: 'assets/prevention/socialDistance.png'),
-        ],
-      ),
+        StreamBuilder(
+          stream: viewModel.multiLangStream,
+          builder: (context, AsyncSnapshot<String> snapshot) {
+            return AreaListView(
+              animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                  parent: animationController,
+                  curve:
+                  Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
+              animationController: animationController,
+              preventions: [
+                Prevention(
+                    prevention: S.of(context).protectiveMask,
+                    description: S.of(context).protectiveMaskDesc,
+                    imagePath: 'assets/prevention/mask.png'),
+                Prevention(
+                    prevention: S.of(context).washHands,
+                    description: S.of(context).washHandsDesc,
+                    imagePath: 'assets/prevention/wash.png'),
+                Prevention(
+                    prevention: S.of(context).coverCough,
+                    description: S.of(context).coverCoughDesc,
+                    imagePath: 'assets/prevention/coughCover.png'),
+                Prevention(
+                    prevention: S.of(context).sanitizeOften,
+                    description: S.of(context).sanitizeOftenDesc,
+                    imagePath: 'assets/prevention/sanitizer.png'),
+                Prevention(
+                    prevention: S.of(context).noFaceTouching,
+                    description: S.of(context).noFaceTouchingDesc,
+                    imagePath: 'assets/prevention/touch.png'),
+                Prevention(
+                    prevention: S.of(context).socialDistancing,
+                    description: S.of(context).socialDistancingDesc,
+                    imagePath: 'assets/prevention/socialDistance.png'),
+              ],
+            );
+          },
+        ),
     );
   }
 
@@ -253,6 +277,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
                   language.value = newValue;
                   var prefs = await SharedPreferences.getInstance();
                   prefs.setString(Constant.language, newValue);
+                  viewModel.multiLangChanged(newValue);
                 },
               )
             ],

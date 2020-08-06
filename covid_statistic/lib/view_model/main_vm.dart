@@ -14,6 +14,8 @@ class MainViewModel extends BaseViewModel {
   final BehaviorSubject<List<CountryPandemic>> _countryPandemic = BehaviorSubject();
   final BehaviorSubject<bool> _refreshCountryList = BehaviorSubject();
 
+  final _multiLang = BehaviorSubject<String>();
+
   MainViewModel() {
     mainInfoChanged(MainInfo.world);
   }
@@ -24,6 +26,7 @@ class MainViewModel extends BaseViewModel {
   Function(MainInfo) get mainInfoChanged => _mainInfo.sink.add;
   Function(List<CountryPandemic>) get countryPandemicChanged => _countryPandemic.sink.add;
   Function(bool) get onRefreshCountryList => _refreshCountryList.sink.add;
+  Function(String) get multiLangChanged => _multiLang.sink.add;
 
   Stream<CovidStatsResponse> get pandemicStatsStream => _statsResponse.stream;
   Stream<CovidInfo> get pandemicInfo => _pandemicResponse.stream;
@@ -31,6 +34,7 @@ class MainViewModel extends BaseViewModel {
   Stream<MainInfo> get mainInfoStream => _mainInfo.stream;
   Stream<List<CountryPandemic>> get countryPandemicStream => _countryPandemic.stream;
   Stream<bool> get refreshCountryStream => _refreshCountryList.stream;
+  Stream<String> get multiLangStream => _multiLang.stream;
 
   MainInfo get mainInfoItem => _mainInfo.value;
   List<CountryPandemic> get countryPandemic => _countryPandemic.value;
@@ -97,5 +101,6 @@ class MainViewModel extends BaseViewModel {
     _mainInfo.close();
     _countryPandemic.close();
     _refreshCountryList.close();
+    _multiLang.close();
   }
 }
