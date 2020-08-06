@@ -52,7 +52,7 @@ Widget gradientAppbar(
             children: <Widget>[
               Flexible(
                 child: Text(
-                  'Covid-19 Pandemic',
+                  '$title',
                   style: GoogleFonts.openSans(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,

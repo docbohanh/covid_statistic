@@ -3,6 +3,7 @@ import 'package:covid_statistic/model/localization.dart';
 import 'package:covid_statistic/utils/app_theme.dart';
 import 'package:covid_statistic/utils/constant.dart';
 import 'package:covid_statistic/utils/local_utils.dart';
+import 'package:covid_statistic/utils/utility.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,7 +20,7 @@ class LocaleDropDown extends StatelessWidget {
     return Container(
       padding: EdgeInsets.only(top: 2),
       child: DropdownButton<String>(
-        value: locale.localeCode.toUpperCase(),
+        value: locale.languageCode.toLowerCase(),
         iconEnabledColor: Theme.of(context).primaryColor,
         focusColor: Theme.of(context).primaryColor,
         icon: Icon(Icons.arrow_drop_down, color: Colors.transparent),
@@ -29,10 +30,7 @@ class LocaleDropDown extends StatelessWidget {
             color: Theme.of(context).accentColor,
             fontSize: 16,
             fontWeight: FontWeight.w600),
-        underline: Container(
-          height: 0,
-          color: Theme.of(context).accentColor,
-        ),
+        underline: SizedBox(),
         onChanged: onChanged,
         selectedItemBuilder: _selectedItemBuilder,
         items: _dropdownMenuItem(),
@@ -61,7 +59,7 @@ class LocaleDropDown extends StatelessWidget {
     return Constant.locales.keys.map<DropdownMenuItem<String>>((String key) {
       ILocalization localeTemp = LocalizationUtils.getLocale(key);
       return DropdownMenuItem<String>(
-        value: key.toUpperCase(),
+        value: localeTemp.languageCode.toLowerCase(),
         child: Container(
           decoration: BoxDecoration(
             boxShadow: <BoxShadow>[

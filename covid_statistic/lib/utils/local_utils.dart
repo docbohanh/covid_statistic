@@ -17,6 +17,21 @@ class LocalizationUtils {
     return Constant.locales[lang];
   }
 
+  static ILocalization locale(String languageCode) {
+    languageCode = languageCode != null ? languageCode.toLowerCase() : '';
+
+    if (languageCode == null || languageCode.isEmpty) {
+      return Constant.locales[Constant.defaultLocaleKey];
+    }
+
+    String lang = Constant.locales.keys.firstWhere(
+            (key) => key.substring(0, 2) == languageCode,
+        orElse: () => Constant.defaultLocaleKey);
+
+
+    return Constant.locales[lang];
+  }
+
   static List<String> getLocaleNamesPretty() {
     return Constant.locales.keys
         .map((name) => name.toUpperCase())

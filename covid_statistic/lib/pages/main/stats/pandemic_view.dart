@@ -142,7 +142,7 @@ class _PandemicView extends State<PandemicView> with TickerProviderStateMixin {
                                                   width: 22,
                                                   height: 22,
                                                   child: Image.asset(
-                                                      "assets/icon/world.png"),
+                                                      "assets/icon/virus.png"),
                                                 ),
                                                 Padding(
                                                   padding:

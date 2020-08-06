@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:covid_statistic/model/localization.dart';
 
 import 'themes/theme.dart';
@@ -8,6 +10,7 @@ class Constant {
   static const String isFirstLogin = 'is_first_login';
 
   static const String appTheme = 'app_theme';
+  static const String language = 'language';
 
   static const defaultLocaleKey = kENUS;
   static final locales = kLocales;
@@ -32,6 +35,11 @@ final Map<String, ITheme> kThemes = {
   kDarkThemeKey: ThemeDark(),
   kDraculaThemeKey: ThemeDracula(),
 };
+
+final List<Locale> supportedLocales = <Locale>[
+  Locale("en", ""),
+  Locale("vi", ""),
+];
 
 const List<Map<String, String>> COUNTRIES = [
   {"name": "Afghanistan", "iso2": "AF", "iso3": "AFG"},

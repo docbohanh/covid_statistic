@@ -18,7 +18,7 @@ class AppTheme {
   static const Color subBlue = Color(0xFF00B6F0);
 
   static var defaultLight = MyTheme(
-    name: 'Default',
+    name: 'LIGHT',
     describe: 'Sáng',
     icon: Icons.wb_sunny,
     brightness: Brightness.light,
@@ -47,7 +47,7 @@ class AppTheme {
   static const Color subText = Color(0xFFBBBBBB);
 
   static var defaultDark = MyTheme(
-    name: 'Dark',
+    name: 'DARK',
     describe: 'Tối',
     icon: Icons.brightness_6,
     brightness: Brightness.dark,

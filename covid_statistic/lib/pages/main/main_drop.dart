@@ -25,6 +25,7 @@ class MainDropdown extends StatelessWidget {
           fontWeight: FontWeight.w600,
         ),
         underline: SizedBox(),
+        icon: SizedBox(),
         selectedItemBuilder: (BuildContext context) {
           return MainInfo.items.map((item) {
             return Center(

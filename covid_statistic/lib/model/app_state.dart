@@ -5,7 +5,6 @@ import 'package:covid_statistic/utils/utility.dart';
 import 'package:frideos/frideos.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 enum ApiType { mock, remote }
 
 class AppState extends AppStateModel {
@@ -21,6 +20,7 @@ class AppState extends AppStateModel {
   // THEMES
   final themes = List<MyTheme>();
   final currentTheme = StreamedValue<MyTheme>();
+  final languageCode = StreamedValue<String>();
   final currentIcons = StreamedValue<String>();
   final icons = List<String>();
 
@@ -68,11 +68,23 @@ class AppState extends AppStateModel {
     final String lastTheme = prefs.getString(Constant.appTheme);
     if (lastTheme != null) {
       currentTheme.value = themes.firstWhere(
-            (theme) => theme.name == lastTheme,
+        (theme) => theme.name == lastTheme,
         orElse: () => themes[0],
       );
     } else {
       currentTheme.value = themes[0];
+    }
+
+    final String language = prefs.getString(Constant.language);
+    if (language != null) {
+      var locale = supportedLocales.firstWhere(
+        (lang) => lang.languageCode == language,
+        orElse: () => supportedLocales[0],
+      );
+
+      languageCode.value = locale.languageCode;
+    } else {
+      languageCode.value = supportedLocales[0].languageCode;
     }
   }
 

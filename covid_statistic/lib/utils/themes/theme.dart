@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'extra_palette.dart';
 
 abstract class ITheme {
+  String name;
   ThemeData themeData;
   ExtraPalette extraPalette;
 
@@ -19,6 +20,10 @@ abstract class ITheme {
 
 /// DARK
 class ThemeDark extends ITheme {
+
+  @override
+  String name = 'DARK';
+
   @override
   ExtraPalette getExtraPalette() {
     return ExtraPalette(
@@ -46,6 +51,9 @@ class ThemeDark extends ITheme {
 
 /// DRACULA
 class ThemeDracula extends ITheme {
+  @override
+  String name = 'DRACULA';
+
   @override
   ExtraPalette getExtraPalette() {
     return ExtraPalette(
@@ -80,6 +88,9 @@ class ThemeDracula extends ITheme {
 
 /// LIGHT
 class ThemeLight extends ITheme {
+  @override
+  String name = 'LIGHT';
+
   @override
   ExtraPalette getExtraPalette() {
     return ExtraPalette(

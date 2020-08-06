@@ -1,8 +1,10 @@
+import 'package:covid_statistic/generated/i18n.dart';
 import 'package:covid_statistic/helper/app_bar.dart';
 import 'package:covid_statistic/helper/color_loader.dart';
 import 'package:covid_statistic/helper/hud.dart';
 import 'package:covid_statistic/helper/locale_dropdown.dart';
 import 'package:covid_statistic/helper/title_view.dart';
+import 'package:covid_statistic/model/app_state.dart';
 import 'package:covid_statistic/model/covid_info.dart';
 import 'package:covid_statistic/model/country_info.dart';
 import 'package:covid_statistic/model/main_info.dart';
@@ -11,12 +13,12 @@ import 'package:covid_statistic/pages/main/precautions/precaution_grid.dart';
 import 'package:covid_statistic/pages/main/stats/pandemic_view.dart';
 import 'package:covid_statistic/pages/main/top_country/country_stats.dart';
 import 'package:covid_statistic/utils/app_theme.dart';
-import 'package:covid_statistic/utils/constant.dart';
 import 'package:covid_statistic/utils/local_utils.dart';
 import 'package:covid_statistic/utils/utility.dart';
 import 'package:covid_statistic/view_model/main_vm.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frideos/frideos.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MainPage extends StatefulWidget {
@@ -39,8 +41,6 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
     animationController = AnimationController(
         duration: Duration(milliseconds: 1000), vsync: this);
 
-    addAllListData();
-
     viewModel.mainInfoStream.listen((mainInfo) {
       if (viewModel.pandemicStats == null) {
         viewModel.fetchedStatistic(updateOther: true);
@@ -51,6 +51,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
 
     super.initState();
 
+    addAllListData();
     viewModel.getCountryPandemic();
   }
 
@@ -203,6 +204,8 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final language = AppStateProvider.of<AppState>(context).languageCode;
+
     return WillPopScope(
       onWillPop: () async {
         return false;
@@ -211,12 +214,18 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
         color: AppTheme.background,
         child: Scaffold(
           backgroundColor: Colors.transparent,
-          appBar: gradientAppbar(height: 54, actions: [
-            LocaleDropDown(
-              locale: LocalizationUtils.getLocale(Constant.defaultLocaleKey),
-              onChanged: (String newValue) {},
-            )
-          ]),
+          appBar: gradientAppbar(
+            title: S.of(context).appTitle,
+            height: 54,
+            actions: [
+              LocaleDropDown(
+                locale: LocalizationUtils.locale(language.value),
+                onChanged: (String newValue) {
+                  language.value = newValue;
+                },
+              )
+            ],
+          ),
           body: Stack(
             children: <Widget>[
               getMainListViewUI(),
