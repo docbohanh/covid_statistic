@@ -82,9 +82,7 @@ class MainViewModel extends BaseViewModel {
   void getCountryPandemic() {
     onRefreshCountryList(true);
     repo.getCountryDiseaseV3().then((value) {
-      var data = value;
-      data.sort((l, r) => r.cases.compareTo(l.cases));
-      countryPandemicChanged(data.toList());
+      countryPandemicChanged(value);
       onRefreshCountryList(false);
     }).catchError((e) {
       errorEvent(error);

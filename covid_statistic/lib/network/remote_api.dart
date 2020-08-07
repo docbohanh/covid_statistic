@@ -98,7 +98,7 @@ class RemoteAPI implements API {
   Future<List<CountryPandemic>> getCountryDiseaseV3() async {
     try {
       var res = await http
-          .get("https://disease.sh/v3/covid-19/countries/")
+          .get("https://disease.sh/v3/covid-19/countries?sort=cases")
           .then((r) => List<Map<String, dynamic>>.from(json.decode(r.body)));
       logger.info(res.length);
       return res.map((e) => CountryPandemic.fromJson(e)).toList();

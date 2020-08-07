@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:covid_statistic/generated/i18n.dart';
 import 'package:covid_statistic/helper/app_bar.dart';
 import 'package:covid_statistic/helper/color_loader.dart';
@@ -42,7 +43,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
   @override
   void initState() {
     animationController = AnimationController(
-        duration: Duration(milliseconds: 1000), vsync: this);
+        duration: Duration(milliseconds: 618), vsync: this);
 
     viewModel.mainInfoStream.listen((mainInfo) {
       if (viewModel.pandemicStats == null) {
@@ -103,7 +104,22 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
             onRefresh: () => refreshPandemicInfo(),
             viewModel: viewModel,
             onChartView: () {
-              HUD.showMessage(context, text: 'Show chart');
+//              HUD.showMessage(context, text: 'Show chart');
+              showDialog(context: context, builder: (context) {
+                void dismiss() {
+                  Navigator.of(context).pop();
+                }
+                return GestureDetector(
+                  onTap: dismiss,
+                  onVerticalDragDown: (_) => dismiss,
+                  child: Container(
+                    height: MediaQuery.of(context).size.height - 128,
+                    child: CachedNetworkImage(
+                      imageUrl: 'https://ncov.moh.gov.vn/documents/20182/6848000/infographicVN1120.jpg',
+                    ),
+                  ),
+                );
+              });
             },
           );
         },
