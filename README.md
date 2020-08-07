@@ -1,6 +1,8 @@
 # covid_statistic
 
 
+![covid2](./covid2.gif)
+
 ## According to [Flutter UI Challenge](https://www.facebook.com/groups/fluttervietnam/permalink/2709493486044459/).
 
 Deadline 11:59 PM 08/08/2020
