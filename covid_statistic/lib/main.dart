@@ -39,7 +39,8 @@ class MyApp extends StatelessWidget {
 
     return ValueBuilder<String>(
       streamed: language,
-      builder: (context, snapshot) => MaterialApp(
+      initialData: 'en',
+      builder: (context, AsyncSnapshot<String> snapshot) => MaterialApp(
         title: 'Covid-19 Pandemic',
         theme: _buildThemeData(AppTheme.defaultLight),
         localizationsDelegates: const [
@@ -48,7 +49,7 @@ class MyApp extends StatelessWidget {
           GlobalWidgetsLocalizations.delegate,
         ],
         supportedLocales: supportedLocales,
-        locale: Locale(language.value, ""),
+        locale: Locale(snapshot.data, ""),
         onGenerateRoute: generateRoute,
         debugShowCheckedModeBanner: false,
         navigatorKey: navigatorKey,
