@@ -1,6 +1,4 @@
 import 'package:covid_statistic/generated/i18n.dart';
-import 'package:covid_statistic/provider/language_provider.dart';
-import 'package:covid_statistic/provider/theme_provider.dart';
 import 'package:covid_statistic/router/router.dart';
 import 'package:covid_statistic/utils/themes/app_theme.dart';
 import 'package:covid_statistic/utils/constant.dart';
@@ -8,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:frideos/frideos.dart';
-import 'package:provider/provider.dart';
 
 import 'model/app_state.dart';
 
@@ -44,6 +41,7 @@ class MyApp extends StatelessWidget {
       streamed: language,
       builder: (context, snapshot) => MaterialApp(
         title: 'Covid-19 Pandemic',
+        theme: _buildThemeData(AppTheme.defaultLight),
         localizationsDelegates: const [
           S.delegate,
           GlobalMaterialLocalizations.delegate,
@@ -56,6 +54,22 @@ class MyApp extends StatelessWidget {
         navigatorKey: navigatorKey,
         initialRoute: Routes.splash,
       ),
+    );
+  }
+
+  ThemeData _buildThemeData(MyTheme appTheme) {
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(statusBarColor: appTheme.textColor));
+
+    return ThemeData(
+      brightness: appTheme.brightness,
+      backgroundColor: appTheme.backgroundColor,
+      scaffoldBackgroundColor: appTheme.scaffoldBackgroundColor,
+      primaryColor: appTheme.primaryColor,
+      primaryColorBrightness: appTheme.primaryColorBrightness,
+      accentColor: appTheme.accentColor,
+      primaryColorLight: appTheme.primaryColorLight,
+      primaryColorDark: appTheme.primaryColorDark,
     );
   }
 }
