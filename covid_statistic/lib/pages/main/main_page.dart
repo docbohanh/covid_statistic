@@ -67,6 +67,8 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
 
   void getLocalCovidInfo() async {
     var data = await CovidLocalData.getCovidData();
+    logger.info('Get local ${data.length} items');
+
     if (data.isNotEmpty) {
       var res = CovidStatsResponse(code: 1, data: data);
 

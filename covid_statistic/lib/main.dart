@@ -13,7 +13,8 @@ import 'model/app_state.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  CovidLocalData.initMockUpData();
+  var existData = await CovidLocalData.getCovidData();
+  if (existData.isEmpty) CovidLocalData.initMockUpData();
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeLeft,

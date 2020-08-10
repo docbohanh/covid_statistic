@@ -15,7 +15,6 @@ class CovidLocalData {
     final List<CovidInfo> covidData = result.isNotEmpty
         ? result.map((c) => CovidInfo.fromJson(c)).toList()
         : [];
-    logger.info('Get local ${covidData.length} items');
     return covidData;
   }
 
@@ -119,6 +118,8 @@ class CovidLocalData {
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
     });
+
+    logger.info('init ${mockData.length} mock data');
   }
 
   static void insertCovidMainData(List<CovidInfo> data) async {
