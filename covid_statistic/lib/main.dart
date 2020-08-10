@@ -1,3 +1,4 @@
+import 'package:covid_statistic/database/covid_data.dart';
 import 'package:covid_statistic/generated/i18n.dart';
 import 'package:covid_statistic/router/router.dart';
 import 'package:covid_statistic/utils/themes/app_theme.dart';
@@ -11,6 +12,8 @@ import 'model/app_state.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  CovidLocalData.initMockUpData();
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeLeft,

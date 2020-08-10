@@ -12,6 +12,8 @@ class CovidStatsResponse implements BaseResponse<List<CovidInfo>> {
   @override
   String message;
 
+  CovidStatsResponse({this.code, this.message = '', this.data});
+
   CovidStatsResponse.fromJson(Map<String, dynamic> json) {
     code = json['code'];
     message = json['message'];
@@ -54,6 +56,14 @@ class CovidStatsResponse implements BaseResponse<List<CovidInfo>> {
       if (item.country.isEmpty) return false;
       var ignores = continents + ignoresName;
       return !ignores.contains(item.country);
+    }).toList();
+  }
+
+  List<CovidInfo> getMainInfectedCountries() {
+    return data.where((item) {
+      if (item.country.isEmpty) return false;
+      var mainItems = MainInfo.items.map((e) => e.name).toList();
+      return mainItems.contains(item.country);
     }).toList();
   }
 

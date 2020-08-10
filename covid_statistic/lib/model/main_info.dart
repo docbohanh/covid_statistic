@@ -33,6 +33,11 @@ class MainInfo {
     link: 'https://www.worldometers.info/coronavirus/',
   );
 
+  static MainInfo peru = MainInfo(
+    name: 'Peru',
+    link: 'https://www.worldometers.info/coronavirus/',
+  );
+
   static MainInfo mexico = MainInfo(
     name: 'Mexico',
     link: 'https://www.worldometers.info/coronavirus/',
@@ -53,6 +58,7 @@ class MainInfo {
     india,
     russia,
     southAfrica,
+    peru,
     mexico
   ];
 }

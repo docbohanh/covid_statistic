@@ -1,3 +1,4 @@
+import 'package:covid_statistic/database/covid_data.dart';
 import 'package:covid_statistic/model/covid_info.dart';
 import 'package:covid_statistic/model/country_info.dart';
 import 'package:covid_statistic/model/main_info.dart';
@@ -15,10 +16,6 @@ class MainViewModel extends BaseViewModel {
   final BehaviorSubject<bool> _refreshCountryList = BehaviorSubject();
 
   final _multiLang = BehaviorSubject<String>();
-
-  MainViewModel() {
-    mainInfoChanged(MainInfo.world);
-  }
 
   Function(CovidStatsResponse) get statsResponse => _statsResponse.sink.add;
   Function(CovidInfo) get pandemicResponse => _pandemicResponse.sink.add;
@@ -53,6 +50,7 @@ class MainViewModel extends BaseViewModel {
       }
 
       statsResponse(value);
+      CovidLocalData.insertCovidMainData(value.getMainInfectedCountries());
       onRefreshCountryList(false);
 
     }).catchError((error) {
@@ -79,7 +77,7 @@ class MainViewModel extends BaseViewModel {
     onRefreshStats(false);
   }
 
-  void getCountryPandemic() {
+  void getCountryDisease() {
     onRefreshCountryList(true);
     repo.getCountryDiseaseV3().then((value) {
       countryPandemicChanged(value);

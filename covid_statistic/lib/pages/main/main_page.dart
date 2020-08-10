@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:covid_statistic/database/covid_data.dart';
 import 'package:covid_statistic/generated/i18n.dart';
 import 'package:covid_statistic/helper/app_bar.dart';
 import 'package:covid_statistic/helper/color_loader.dart';
@@ -10,6 +11,7 @@ import 'package:covid_statistic/model/covid_info.dart';
 import 'package:covid_statistic/model/country_info.dart';
 import 'package:covid_statistic/model/main_info.dart';
 import 'package:covid_statistic/model/prevention.dart';
+import 'package:covid_statistic/network/response/response.dart';
 import 'package:covid_statistic/pages/main/main_drop.dart';
 import 'package:covid_statistic/pages/main/precautions/precaution_grid.dart';
 import 'package:covid_statistic/pages/main/stats/pandemic_view.dart';
@@ -42,8 +44,8 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    animationController = AnimationController(
-        duration: Duration(milliseconds: 618), vsync: this);
+    animationController =
+        AnimationController(duration: Duration(milliseconds: 618), vsync: this);
 
     viewModel.mainInfoStream.listen((mainInfo) {
       if (viewModel.pandemicStats == null) {
@@ -53,8 +55,28 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
       }
     });
 
+    getLocalCovidInfo();
+
     super.initState();
-    viewModel.getCountryPandemic();
+
+    viewModel.getCountryDisease();
+
+    Future.delayed(Duration(milliseconds: 500))
+        .then((value) => viewModel.refreshMainInfoPandemic());
+  }
+
+  void getLocalCovidInfo() async {
+    var data = await CovidLocalData.getCovidData();
+    if (data.isNotEmpty) {
+      var res = CovidStatsResponse(code: 1, data: data);
+
+      viewModel.onRefreshStats(false);
+      viewModel.statsResponse(res);
+
+      viewModel.pandemicResponse(res.countryInfo(MainInfo.world));
+    }
+
+    viewModel.mainInfoChanged(MainInfo.world);
   }
 
   void refreshPandemicInfo() {
@@ -105,21 +127,25 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
             viewModel: viewModel,
             onChartView: () {
 //              HUD.showMessage(context, text: 'Show chart');
-              showDialog(context: context, builder: (context) {
-                void dismiss() {
-                  Navigator.of(context).pop();
-                }
-                return GestureDetector(
-                  onTap: dismiss,
-                  onVerticalDragDown: (_) => dismiss,
-                  child: Container(
-                    height: MediaQuery.of(context).size.height - 128,
-                    child: CachedNetworkImage(
-                      imageUrl: 'https://ncov.moh.gov.vn/documents/20182/6848000/infographicVN1120.jpg',
-                    ),
-                  ),
-                );
-              });
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    void dismiss() {
+                      Navigator.of(context).pop();
+                    }
+
+                    return GestureDetector(
+                      onTap: dismiss,
+                      onVerticalDragDown: (_) => dismiss,
+                      child: Container(
+                        height: MediaQuery.of(context).size.height - 128,
+                        child: CachedNetworkImage(
+                          imageUrl:
+                              'https://ncov.moh.gov.vn/documents/20182/6848000/infographicVN1120.jpg',
+                        ),
+                      ),
+                    );
+                  });
             },
           );
         },
@@ -129,7 +155,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
     listViews.add(
       TitleView(
         title: GestureDetector(
-          onTap: () => viewModel.getCountryPandemic(),
+          onTap: () => viewModel.getCountryDisease(),
           child: StreamBuilder(
             stream: viewModel.refreshCountryStream,
             initialData: false,
@@ -199,73 +225,75 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
     ));
 
     listViews.add(
-        StreamBuilder(
-          stream: viewModel.multiLangStream,
-          builder: (context, AsyncSnapshot<String> snapshot) {
-            return TitleView(
-              title: Text(
-                S.of(context).precautions,
-                textAlign: TextAlign.left,
-                style: GoogleFonts.roboto(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 17,
-                  letterSpacing: 0.5,
-                  color: AppTheme.lightText,
-                ),
+      StreamBuilder(
+        stream: viewModel.multiLangStream,
+        builder: (context, AsyncSnapshot<String> snapshot) {
+          return TitleView(
+            title: Text(
+              S.of(context).precautions,
+              textAlign: TextAlign.left,
+              style: GoogleFonts.roboto(
+                fontWeight: FontWeight.w500,
+                fontSize: 17,
+                letterSpacing: 0.5,
+                color: AppTheme.lightText,
               ),
-              subTxt: S.of(context).more,
-              onViewMore: () {
-                HUD.showMessage(context, text: 'View more');
-              },
-              animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-                  parent: animationController,
-                  curve:
-                  Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
-              animationController: animationController,
-            );
-          },
-        ),
+            ),
+            subTxt: S.of(context).more,
+            onViewMore: () {
+              HUD.showMessage(context, text: 'View more');
+            },
+            animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+                CurvedAnimation(
+                    parent: animationController,
+                    curve: Interval((1 / count) * 4, 1.0,
+                        curve: Curves.fastOutSlowIn))),
+            animationController: animationController,
+          );
+        },
+      ),
     );
 
     listViews.add(
-        StreamBuilder(
-          stream: viewModel.multiLangStream,
-          builder: (context, AsyncSnapshot<String> snapshot) {
-            return AreaListView(
-              animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-                  parent: animationController,
-                  curve:
-                  Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
-              animationController: animationController,
-              preventions: [
-                Prevention(
-                    prevention: S.of(context).protectiveMask,
-                    description: S.of(context).protectiveMaskDesc,
-                    imagePath: 'assets/prevention/mask.png'),
-                Prevention(
-                    prevention: S.of(context).washHands,
-                    description: S.of(context).washHandsDesc,
-                    imagePath: 'assets/prevention/wash.png'),
-                Prevention(
-                    prevention: S.of(context).coverCough,
-                    description: S.of(context).coverCoughDesc,
-                    imagePath: 'assets/prevention/coughCover.png'),
-                Prevention(
-                    prevention: S.of(context).sanitizeOften,
-                    description: S.of(context).sanitizeOftenDesc,
-                    imagePath: 'assets/prevention/sanitizer.png'),
-                Prevention(
-                    prevention: S.of(context).noFaceTouching,
-                    description: S.of(context).noFaceTouchingDesc,
-                    imagePath: 'assets/prevention/touch.png'),
-                Prevention(
-                    prevention: S.of(context).socialDistancing,
-                    description: S.of(context).socialDistancingDesc,
-                    imagePath: 'assets/prevention/socialDistance.png'),
-              ],
-            );
-          },
-        ),
+      StreamBuilder(
+        stream: viewModel.multiLangStream,
+        builder: (context, AsyncSnapshot<String> snapshot) {
+          return AreaListView(
+            animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+                CurvedAnimation(
+                    parent: animationController,
+                    curve: Interval((1 / count) * 5, 1.0,
+                        curve: Curves.fastOutSlowIn))),
+            animationController: animationController,
+            preventions: [
+              Prevention(
+                  prevention: S.of(context).protectiveMask,
+                  description: S.of(context).protectiveMaskDesc,
+                  imagePath: 'assets/prevention/mask.png'),
+              Prevention(
+                  prevention: S.of(context).washHands,
+                  description: S.of(context).washHandsDesc,
+                  imagePath: 'assets/prevention/wash.png'),
+              Prevention(
+                  prevention: S.of(context).coverCough,
+                  description: S.of(context).coverCoughDesc,
+                  imagePath: 'assets/prevention/coughCover.png'),
+              Prevention(
+                  prevention: S.of(context).sanitizeOften,
+                  description: S.of(context).sanitizeOftenDesc,
+                  imagePath: 'assets/prevention/sanitizer.png'),
+              Prevention(
+                  prevention: S.of(context).noFaceTouching,
+                  description: S.of(context).noFaceTouchingDesc,
+                  imagePath: 'assets/prevention/touch.png'),
+              Prevention(
+                  prevention: S.of(context).socialDistancing,
+                  description: S.of(context).socialDistancingDesc,
+                  imagePath: 'assets/prevention/socialDistance.png'),
+            ],
+          );
+        },
+      ),
     );
   }
 

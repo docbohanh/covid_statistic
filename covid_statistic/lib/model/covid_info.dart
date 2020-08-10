@@ -1,3 +1,4 @@
+import 'package:covid_statistic/database/database.dart';
 import 'package:covid_statistic/utils/constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/svg.dart';

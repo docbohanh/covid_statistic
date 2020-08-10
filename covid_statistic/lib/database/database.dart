@@ -34,8 +34,7 @@ class DatabaseProvider {
 
   void initDB(Database database, int version) async {
     await database.execute("CREATE TABLE IF NOT EXISTS $covidTABLE ("
-        "id INTEGER PRIMARY KEY, "
-        "country TEXT UNIQUE, "
+        "country TEXT PRIMARY KEY, "
         "totalCases TEXT, "
         "newCases TEXT, "
         "totalDeaths TEXT, "
