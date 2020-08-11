@@ -66,6 +66,8 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
   }
 
   void getLocalCovidInfo() async {
+    await Future.delayed(Duration(milliseconds: 300));
+
     var data = await CovidLocalData.getCovidData();
     logger.info('Get local ${data.length} items');
 
