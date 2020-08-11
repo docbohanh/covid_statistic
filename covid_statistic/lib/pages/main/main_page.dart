@@ -16,6 +16,7 @@ import 'package:covid_statistic/pages/main/main_drop.dart';
 import 'package:covid_statistic/pages/main/precautions/precaution_grid.dart';
 import 'package:covid_statistic/pages/main/stats/pandemic_view.dart';
 import 'package:covid_statistic/pages/main/top_country/country_stats.dart';
+import 'package:covid_statistic/utils/custom_colors.dart';
 import 'package:covid_statistic/utils/themes/app_theme.dart';
 import 'package:covid_statistic/utils/constant.dart';
 import 'package:covid_statistic/utils/local_utils.dart';
@@ -134,9 +135,8 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
               showDialog(
                   context: context,
                   builder: (context) {
-                    void dismiss() {
-                      Navigator.of(context).pop();
-                    }
+                    void dismiss() => Navigator.of(context).pop();
+                    var infoGraphicVN1120 = 'https://ncov.moh.gov.vn/documents/20182/6848000/infographicVN1120.jpg';
 
                     return GestureDetector(
                       onTap: dismiss,
@@ -144,8 +144,27 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin {
                       child: Container(
                         height: MediaQuery.of(context).size.height - 128,
                         child: CachedNetworkImage(
-                          imageUrl:
-                              'https://ncov.moh.gov.vn/documents/20182/6848000/infographicVN1120.jpg',
+                          placeholder: (cxt, url) => Container(
+                            padding: EdgeInsets.all(16),
+                            child: Center(
+                              child: Container(
+                                padding: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.5),
+                                  borderRadius: BorderRadius.all(Radius.circular(8.0))
+                                ),
+                                child: Text(
+                                  'Đang tải $infoGraphicVN1120',
+                                  style: TextStyle(
+                                    decoration: TextDecoration.none,
+                                    fontSize: 16,
+                                    color: CustomColors.HeaderBlueDark
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          imageUrl: infoGraphicVN1120,
                         ),
                       ),
                     );
